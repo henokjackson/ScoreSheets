@@ -8,7 +8,7 @@ def MENU():                                                                     
     print("\t"*3+"█"*58)
 
 
-def PROGBAR(nue,den):                                                                                   # PROGRESS BAR
+def PROGBAR(nue,den,filename):                                                                                   # PROGRESS BAR
     os.system('cls')
     prog=(nue/den)*10
     print("Progress: [","█"*int(prog)," "*(10-int(prog)),"\b] ~",int(prog*10),"%")

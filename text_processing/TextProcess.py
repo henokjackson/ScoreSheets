@@ -3,14 +3,14 @@ from curses import color_content                                                
 import spacy                                                                                            # LIBRARY FOR NLP
 import string                                                                                           # LIBRARY FOR STRING OPERATIONS
 import PyPDF2                                                                                           # LIBRARY FOR READING NO.OF PAGES IN A PDF
-from Vars import *                                                                                      # MODULE CONTAINING GLOBAL VARIABLES
+from vars import *                                                                                      # MODULE CONTAINING GLOBAL VARIABLES
 import multiprocessing                                                                                  # LIBRARY FOR GETTING CPU CORE COUNT
 import pdf2image as PDF                                                                                 # LIBRARY FOR CONVERTING PDF TO IMAGE
 import pytesseract as OCR                                                                               # LIBRARY FOR OCR
 from nltk.corpus import stopwords                                                                       # LIBRARY FOR DETERMINING STOPWORDS FROM TEXT
 from nltk.tokenize import word_tokenize                                                                 # LIBRARY FOR TOKENIZATION OF TEXT
-from Score_Calculation.MOOC import WeekExtract                                                          # LIBRARY FOR SCORE CALCULATION FUNCTIONS
-from Image_Pre_Processing.ImgProcess import ImageProcess
+from score_calculation.MOOC import WeekExtract                                                          # LIBRARY FOR SCORE CALCULATION FUNCTIONS
+from image_processing.ImgProcess import ImageProcess
 
 def TextProcess(text):
     remove=str.maketrans(string.punctuation, ' '*len(string.punctuation))   
@@ -69,7 +69,7 @@ def TextProcess(text):
             if (str(row[0]).lower())==(str(names[i]).lower()):                                          # CHECKING IF NAME LIST CONTAIN ANY MATCHING ENTITY
                 name=names[i]                                                                           # ASSINGING NAME
     if(name=="NO_NAME"):
-        details["NAME"]="=HYPERLINK("+"\""+srcpath+"\\"+filename+"\""+",\"NO_NAME\""+")"                # GIVE FILE PATH AS HYPERLINK IN CASE OF NO_NAME
+        details["NAME"]="=HYPERLINK("+"\""+srcpath+"/"+filename+"\""+",\"NO_NAME\""+")"                # GIVE FILE PATH AS HYPERLINK IN CASE OF NO_NAME
     else:
         details["NAME"]=name                                                                            # APPENDING NAME TO DICT
     details["COURSE TYPE"]=course_type                                                                  # APPENDING COURSE TYPE TO DICT
@@ -81,8 +81,8 @@ def TextExtract(img):
 
 
 def PDFExtract():
-    reader=PyPDF2.PdfFileReader(open(srcpath+"\\"+filename,mode="rb"),strict=False)                     # READING NO.OF PAGES OF A PDF
-    pages=PDF.convert_from_path(srcpath+"\\"+filename,thread_count=multiprocessing.cpu_count(),dpi=200,strict=False)
+    reader=PyPDF2.PdfFileReader(open(srcpath+"/"+filename,mode="rb"),strict=False)                     # READING NO.OF PAGES OF A PDF
+    pages=PDF.convert_from_path(srcpath+"/"+filename,thread_count=multiprocessing.cpu_count(),dpi=200,strict=False)
     for pagecount,page in enumerate(pages,1):                                                           # CONVERSION OF PDF TO JPEG       
         if pagecount==reader.getNumPages() or pagecount==1:                       
             img=ImageProcess(page)                                                                      # IMAGE PROCESSING FUNCTION CALL                                                  
@@ -111,7 +111,7 @@ def MERGE_DUPLICATES():
 def DICT_TO_CSV():                                                                                      # CONVERT DICT TO CSV
     columns=['NAME','COURSE TYPE','DURATION','POINTS','TOTAL']
     global csvflag
-    with open(outpath+"\\Data\\CertificateDetails.csv",'a+') as csv_file:  
+    with open(outpath+"/Data/CertificateDetails.csv",'a+') as csv_file:  
         writer=csv.DictWriter(csv_file,fieldnames=columns)                                              # IMPORTING CSV FILE AND SETTING FIELDS
         if csvflag!=1:                                                                                  # CHECKING FOR HEADER FLAG
             writer.writeheader()                                                                        # WRITING HEADER TO CSV

@@ -1,12 +1,12 @@
-from Vars import *                                                                                      # MODULE CONTAINING GLOBAL VARIABLES
+from vars import *                                                                                      # MODULE CONTAINING GLOBAL VARIABLES
 from pathlib import Path                                                                                # LIBRARY FOR READING FILE EXTENSION FROM PATH
 import pytesseract as OCR                                                                               # LIBRARY FOR OCR
-from Image_Pre_Processing.ImgProcess import CROP_IMAGE,SCALE_IMAGE                                      # LIBRARY FOR PERFORMING SPECIALIZED IMAGE PRE-PREOCESSING
+from image_processing.ImgProcess import CROP_IMAGE,SCALE_IMAGE                                          # LIBRARY FOR PERFORMING SPECIALIZED IMAGE PRE-PREOCESSING
 
 week12_marks=0                                                                                          # GLOBAL WEEK POINT VARIABLES
-week6_marks=0 
-week3_marks=0 
-week2_marks=0 
+week6_marks=0
+week3_marks=0
+week2_marks=0
 week1_marks=0
 
 def PointCalc(week):                                                                                    # POINT CALCULATOR
