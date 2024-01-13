@@ -30,11 +30,11 @@ pdfFileName = ''
 isMarksCustomized = False
 isCsvHeaderWritten = False
 
-week12_marks = 0
-week6_marks = 0 
-week3_marks = 0 
-week2_marks = 0 
-week1_marks = 0
+week12Score = 0
+week6Score = 0 
+week3Score = 0 
+week2Score = 0 
+week1Score = 0
 
 def ScoreAggregator():
     if not currentPdfDataList: currentPdfDataList.append(currentPdfData)
@@ -163,39 +163,48 @@ def TextExtract(img):
     text = OCR.image_to_string(img)                                                                       # IMAGE TO TEXT
     TextProcess(text)                                                                                   # CALLING TEXT PROCESSING FUNCTION
 
-def PointCALC(week):                                                                                    # POINT CALCULATOR
-    points=0
-    while(week>=12):
-        points+=int(week12_marks)
-        week-=12
-    while(week>=6):
-        points+=int(week6_marks)
-        week-=6
-    while(week>=3):
-        points+=int(week3_marks)
-        week-=3
-    while(week>=2):
-        points+=int(week2_marks)
-        week-=2
-    while(week>=1):
-        points+=int(week1_marks)
-        week-=1
-    currentPdfData["POINTS"]=points                                                                               # APPENDING POINT TO DICT
+def ScoreCalculator(courseDuration):                                                                                    # POINT CALCULATOR
+    
+    courseDurationClone = courseDuration
+    totalScore = 0
 
-def CropImage(img):                                                                                    # IMAGE CROPPING
-    _,img_h=img.size
-    return img.crop((0,0,600,img_h))                                                                    # RETURNING PIL OBJECT OF CROPPED IMAGE
+    while(courseDurationClone >= 12):
+        totalScore += week12Score
+        courseDurationClone -= 12
+    while(courseDurationClone >= 6):
+        totalScore += week6Score
+        courseDurationClone -= 6
+    while(courseDurationClone >= 3):
+        totalScore += int(week3Score)
+        courseDurationClone -= 3
+    while(courseDurationClone >= 2):
+        totalScore += week2Score
+        courseDurationClone -= 2
+    while(courseDurationClone >= 1):
+        totalScore += week1Score
+        courseDurationClone -= 1
 
-def ScaleImage(img):                                                                                   # IMAGE SCALING FUNCTION
-    img_w,img_h=img.size                                                                                # DETERMINE IMAGE SIZE
-    bg=Image.new('RGB',(1080,1080),'white')                                                             # CREATE WHITE BACKGROUND
+    currentPdfData["POINTS"] = totalScore
+
+def CropImage(inputImage):
+    _, inputImageHeight = inputImage.size
+    return inputImage.crop((0, 0, 600, inputImageHeight))
+
+def ScaleImage(inputImage):
+    # Get Image Size
+    inputImageWidth, inputImageHeight = inputImage.size 
+
+    # Create a White Canvas
+    canvas = Image.new('RGB',(1080,1080),'white')
+
+    # Reduce Input Image
     img_w=int(img_w/5)                                                             
     img_h=int(img_h/5)
     img=img.resize((img_w,img_h))                                                                       # RESIZE THE IMAGE BY A FACTOR OF 10
-    bg_w,bg_h=bg.size                                                                                   # DETERMINE BACKGROUND IMAGE SIZE
-    offset=(int((bg_w-img_w)/2),int((bg_h-img_h)/2))                                                    # CALCULATE OFFSET
-    bg.paste(img,offset)                                                                                # PASTE RESIZED IMAGE TO WHITE BACKGROUND
-    return bg
+    canvasWidth, canvasHeight = canvas.size                                                                                   # DETERMINE BACKGROUND IMAGE SIZE
+    offset=(int((canvasWidth-img_w)/2),int((canvasHeight-img_h)/2))                                                    # CALCULATE OFFSET
+    canvas.paste(img,offset)                                                                                # PASTE RESIZED IMAGE TO WHITE BACKGROUND
+    return canvas
 
 def ParseWeeks(img):                                                                                    # WEEKS READING FUNCTION
     text=OCR.image_to_string(img,config='--psm 6')                                                      # SETTING PYTESSERACT TO psm6 CONFIGUTAION TO READ LARGE FONTS
@@ -206,27 +215,30 @@ def ParseWeeks(img):                                                            
                 large=int(word)                                                                         # FINDING THE LARGEST NUMBER
     return large                                                                                        # RETURNING THE LARGEST NO.OF WEEKS
 
-def ParseCourseDuration(img):
+def GetCourseDuration(preprocessedPdfCurrentPageImg):
 
     # Crop The Required Area 
-    img = CropImage(img) 
+    preprocessedPdfCurrentPageImg = CropImage(preprocessedPdfCurrentPageImg) 
     
     # Scale Image To Required Size
-    img = ScaleImage(img)
+    preprocessedPdfCurrentPageImg = ScaleImage(preprocessedPdfCurrentPageImg)
 
     # Parse Course Duration From Pre-Processed Image
-    week=READ_WEEKS(img)                                                                                # CALLING WEEK READING FUNCTION
-    currentPdfData["DURATION"]=week                                                                               # APPENDING DURATION TO DICT
-    PointCALC(week)                                                                                     # CALLING POINT CALCULATING FUNCTION
+    courseDuration = ParseWeeks(preprocessedPdfCurrentPageImg)
+
+    currentPdfData["DURATION"] = courseDuration
+
+    # Calculate Score
+    ScoreCalculator(courseDuration)
 
 def CustomizeMarks():
 
-    global week12_marks, week6_marks, week3_marks, week2_marks, week1_marks
-    week12_marks=input("INPUT MARKS FOR WEEK >= 12 WEEKS:")
-    week6_marks=input("INPUT MARKS FOR WEEK >= 6 WEEKS:")
-    week3_marks=input("INPUT MARKS FOR WEEK >= 3 WEEKS:")
-    week2_marks=input("INPUT MARKS FOR WEEK >= 2 WEEKS:")
-    week1_marks=input("INPUT MARKS FOR WEEK >= 1 WEEK :")
+    global week12Score, week6Score, week3Score, week2Score, week1Score
+    week12Score = int(input("INPUT MARKS FOR WEEK >= 12 WEEKS:"))
+    week6Score = int(input("INPUT MARKS FOR WEEK >= 6 WEEKS:"))
+    week3Score = int(input("INPUT MARKS FOR WEEK >= 3 WEEKS:"))
+    week2Score = int(input("INPUT MARKS FOR WEEK >= 2 WEEKS:"))
+    week1Score = int(input("INPUT MARKS FOR WEEK >= 1 WEEK :"))
 
 
 def ImagePreProcess(pdfCurrentPageImg):
@@ -266,24 +278,25 @@ def PDFDataExtract():
             # Extract Info From First-Page
             if pdfCurrentPageNumber == 1: TextExtract(preprocessedPdfCurrentPageImg)
             # Extract Info From Last-Page
-            elif pdfCurrentPageNumber == len(pdfReader.pages): ParseCourseDuration(preprocessedPdfCurrentPageImg)
+            elif pdfCurrentPageNumber == len(pdfReader.pages): GetCourseDuration(preprocessedPdfCurrentPageImg)
 
 def LoadKTUScheme():
-    global week12_marks, week6_marks, week3_marks, week2_marks, week1_marks
-    week1_marks=3
-    week2_marks=6
-    week3_marks=12
-    week6_marks=25
-    week12_marks=50
+    global week12Score, week6Score, week3Score, week2Score, week1Score
+    week1Score = 3
+    week2Score = 6
+    week3Score = 12
+    week6Score = 25
+    week12Score = 50
 
 def Configuration():
     global sourceFolderPath, outputFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfData, isMarksCustomized
 
-    sourceFolderPath=input("\nENTER THE SOURCE FOLDER PATH : ")
-    outputFolderPath=input("ENTER THE WORKSPACE FOLDER PATH : ")
-    courseProviderNameListCsvFilePath=input("ENTER COURSE NAME LIST FILE PATH : ")
-    personNameListCsvFilePath=input("ENTER NAME LIST FILE PATH : ")
-    isMarksCustomized= True if (input("WOULD YOU LIKE TO CUSTOMIZE THE MARKING SCHEME FOR EACH WEEK (Y/N)? [DEFAULT SCHEME : KTU]").lower() == 'y') else False
+    # Input Parameters
+    sourceFolderPath = input("\nENTER THE SOURCE FOLDER PATH : ")
+    outputFolderPath = input("ENTER THE WORKSPACE FOLDER PATH : ")
+    courseProviderNameListCsvFilePath = input("ENTER COURSE NAME LIST FILE PATH : ")
+    personNameListCsvFilePath = input("ENTER NAME LIST FILE PATH : ")
+    isMarksCustomized = True if (input("WOULD YOU LIKE TO CUSTOMIZE THE MARKING SCHEME FOR EACH WEEK (Y/N)? [DEFAULT SCHEME : KTU]").lower() == 'y') else False
 
 def FlushBuffers():
     global currentPdfData
@@ -309,7 +322,7 @@ if __name__ == "__main__":
     # Performing PDF Search and Parsing
     for index, pdfFileName in enumerate(os.listdir(sourceFolderPath),1):
 
-        fileExt=Path(pdfFileName).suffix.lower()
+        fileExt = Path(pdfFileName).suffix.lower()
 
         # Update Progress
         ProgressBar(index, len(os.listdir(sourceFolderPath)))
