@@ -159,11 +159,15 @@ def CSVWriter():                                                                
                     data["TOTAL"]=data["POINTS"]
             writer.writerow(data)                                                                       # WRITING DICTIONARY DATA INTO CSV
     
-def TextExtract(img):
-    text = OCR.image_to_string(img)                                                                       # IMAGE TO TEXT
-    TextProcess(text)                                                                                   # CALLING TEXT PROCESSING FUNCTION
+def TextExtract(currentPageImage):
 
-def ScoreCalculator(courseDuration):                                                                                    # POINT CALCULATOR
+    # Read Text From Image
+    text = OCR.image_to_string(currentPageImage)
+    
+    # Text Processing Function
+    TextProcess(text)
+
+def ScoreCalculator(courseDuration):
     
     courseDurationClone = courseDuration
     totalScore = 0
@@ -171,69 +175,101 @@ def ScoreCalculator(courseDuration):                                            
     while(courseDurationClone >= 12):
         totalScore += week12Score
         courseDurationClone -= 12
+        
     while(courseDurationClone >= 6):
         totalScore += week6Score
         courseDurationClone -= 6
+
     while(courseDurationClone >= 3):
         totalScore += int(week3Score)
         courseDurationClone -= 3
+    
     while(courseDurationClone >= 2):
         totalScore += week2Score
         courseDurationClone -= 2
+    
     while(courseDurationClone >= 1):
         totalScore += week1Score
         courseDurationClone -= 1
 
-    currentPdfData["POINTS"] = totalScore
+    return totalScore
 
 def CropImage(inputImage):
+
+    # Get Image Size
     _, inputImageHeight = inputImage.size
-    return inputImage.crop((0, 0, 600, inputImageHeight))
+    
+    # Crop Image
+    outputImage = inputImage.crop((0, 0, 600, inputImageHeight))
+
+    return outputImage
 
 def ScaleImage(inputImage):
+
     # Get Image Size
     inputImageWidth, inputImageHeight = inputImage.size 
 
     # Create a White Canvas
-    canvas = Image.new('RGB',(1080,1080),'white')
+    canvas = Image.new('RGB', (1080, 1080), 'white')
 
     # Reduce Input Image
-    img_w=int(img_w/5)                                                             
-    img_h=int(img_h/5)
-    img=img.resize((img_w,img_h))                                                                       # RESIZE THE IMAGE BY A FACTOR OF 10
-    canvasWidth, canvasHeight = canvas.size                                                                                   # DETERMINE BACKGROUND IMAGE SIZE
-    offset=(int((canvasWidth-img_w)/2),int((canvasHeight-img_h)/2))                                                    # CALCULATE OFFSET
-    canvas.paste(img,offset)                                                                                # PASTE RESIZED IMAGE TO WHITE BACKGROUND
-    return canvas
+    inputImageWidthReduced = int(inputImageWidth/5)                                                             
+    inputImageHeightReduced = int(inputImageHeight/5)
+    inputImageResized = inputImage.resize((inputImageWidthReduced, inputImageHeightReduced))
 
-def ParseWeeks(img):                                                                                    # WEEKS READING FUNCTION
-    text=OCR.image_to_string(img,config='--psm 6')                                                      # SETTING PYTESSERACT TO psm6 CONFIGUTAION TO READ LARGE FONTS
-    large=0
+    # Get Canvas SIze
+    canvasWidth, canvasHeight = canvas.size
+
+    # Calculating Image Offset
+    imageBorderOffset = (int((canvasWidth-inputImageWidthReduced)/2),int((canvasHeight-inputImageHeightReduced)/2))
+
+    # Pasting Image To Canvas
+    canvas.paste(inputImageResized, imageBorderOffset)
+
+    outputImage = canvas
+
+    return outputImage
+
+def ParseWeeks(img):
+
+    # Read Text From Image, Configuring To Read Large Fonts
+    text = OCR.image_to_string(img, config='--psm 6')
+
+    # Determine Course Duration
+    longestCourseDuration = 0
     for word in text:
-        if word.isnumeric():                                                                            # CHECKING IF THE READ DATA CONTAINS A NUMBER (WEEK)
-            if large<int(word):
-                large=int(word)                                                                         # FINDING THE LARGEST NUMBER
-    return large                                                                                        # RETURNING THE LARGEST NO.OF WEEKS
+        if word.isnumeric():
+            if longestCourseDuration < int(word):
+                longestCourseDuration = int(word)
 
-def GetCourseDuration(preprocessedPdfCurrentPageImg):
+    courseDuration = longestCourseDuration
+
+    return courseDuration
+
+def GetCourseDuration(preprocessedpdfCurrentPageImage):
 
     # Crop The Required Area 
-    preprocessedPdfCurrentPageImg = CropImage(preprocessedPdfCurrentPageImg) 
+    preprocessedpdfCurrentPageImage = CropImage(preprocessedpdfCurrentPageImage) 
     
     # Scale Image To Required Size
-    preprocessedPdfCurrentPageImg = ScaleImage(preprocessedPdfCurrentPageImg)
+    preprocessedpdfCurrentPageImage = ScaleImage(preprocessedpdfCurrentPageImage)
 
     # Parse Course Duration From Pre-Processed Image
-    courseDuration = ParseWeeks(preprocessedPdfCurrentPageImg)
+    courseDuration = ParseWeeks(preprocessedpdfCurrentPageImage)
 
+    # Set Course Duration
     currentPdfData["DURATION"] = courseDuration
 
     # Calculate Score
-    ScoreCalculator(courseDuration)
+    totalScore = ScoreCalculator(courseDuration)
+    
+    # Set Scores
+    currentPdfData["POINTS"] = totalScore
 
 def CustomizeMarks():
 
     global week12Score, week6Score, week3Score, week2Score, week1Score
+
     week12Score = int(input("INPUT MARKS FOR WEEK >= 12 WEEKS:"))
     week6Score = int(input("INPUT MARKS FOR WEEK >= 6 WEEKS:"))
     week3Score = int(input("INPUT MARKS FOR WEEK >= 3 WEEKS:"))
@@ -241,26 +277,28 @@ def CustomizeMarks():
     week1Score = int(input("INPUT MARKS FOR WEEK >= 1 WEEK :"))
 
 
-def ImagePreProcess(pdfCurrentPageImg):
+def ImagePreProcess(pdfCurrentPageImage):
+
     # Increase Image Contrast
-    pdfCurrentPageImg = ImageEnhance.Contrast(pdfCurrentPageImg).enhance(imgContrastEnhanceFactor)
+    pdfCurrentPageImage = ImageEnhance.Contrast(pdfCurrentPageImage).enhance(imgContrastEnhanceFactor)
 
     # Increase Image Sharpness
-    pdfCurrentPageImg = ImageEnhance.Sharpness(pdfCurrentPageImg).enhance(imgSharpnessEnhanceFactor)
+    pdfCurrentPageImage = ImageEnhance.Sharpness(pdfCurrentPageImage).enhance(imgSharpnessEnhanceFactor)
 
     # Convert Image To Grayscale
-    pdfCurrentPageImg = pdfCurrentPageImg.convert('L')
+    pdfCurrentPageImage = pdfCurrentPageImage.convert('L')
 
     # Correct Image Orientation
-    angle = OCR.image_to_osd(pdfCurrentPageImg)
+    angle = OCR.image_to_osd(pdfCurrentPageImage)
     angle = angle.split("\n")
     rot = [int(i) for i in angle[2].split() if i.isdigit()]
-    pdfCurrentPageImg = pdfCurrentPageImg.rotate(rot[0],expand = True)
+    pdfCurrentPageImage = pdfCurrentPageImage.rotate(rot[0],expand = True)
 
     # Return Pre-Processed Image
-    return pdfCurrentPageImg
+    return pdfCurrentPageImage
 
 def PDFDataExtract():
+
     # Setting Up PDF Reader
     pdfReader = PyPDF2.PdfReader(open(sourceFolderPath+"/"+pdfFileName,mode="rb"),strict=False)
 
@@ -268,20 +306,24 @@ def PDFDataExtract():
     pdfPagesImgList = PDF.convert_from_path(sourceFolderPath+"/"+pdfFileName,thread_count=multiprocessing.cpu_count(),dpi=200,strict=False)
 
     # Processing Each Page
-    for pdfCurrentPageNumber,pdfCurrentPageImg in enumerate(pdfPagesImgList,1):
+    for pdfCurrentPageNumber, pdfCurrentPageImage in enumerate(pdfPagesImgList,1):
 
         # Checking For First-Page and Last-Page
         if pdfCurrentPageNumber == len(pdfReader.pages) or pdfCurrentPageNumber == 1:
+
             # Pre-Processing The Image
-            preprocessedPdfCurrentPageImg = ImagePreProcess(pdfCurrentPageImg)
+            preprocessedpdfCurrentPageImage = ImagePreProcess(pdfCurrentPageImage)
 
             # Extract Info From First-Page
-            if pdfCurrentPageNumber == 1: TextExtract(preprocessedPdfCurrentPageImg)
+            if pdfCurrentPageNumber == 1: TextExtract(preprocessedpdfCurrentPageImage)
+
             # Extract Info From Last-Page
-            elif pdfCurrentPageNumber == len(pdfReader.pages): GetCourseDuration(preprocessedPdfCurrentPageImg)
+            elif pdfCurrentPageNumber == len(pdfReader.pages): GetCourseDuration(preprocessedpdfCurrentPageImage)
 
 def LoadKTUScheme():
+
     global week12Score, week6Score, week3Score, week2Score, week1Score
+
     week1Score = 3
     week2Score = 6
     week3Score = 12
@@ -289,6 +331,7 @@ def LoadKTUScheme():
     week12Score = 50
 
 def Configuration():
+
     global sourceFolderPath, outputFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfData, isMarksCustomized
 
     # Input Parameters
