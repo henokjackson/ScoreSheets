@@ -22,7 +22,8 @@ currentPdfDataDictionary = {}
 currentPdfDataList = []
 
 sourceFolderPath = ''
-outputFolderPath = ''
+outputFolderParentPath = ''
+outputFolderName = 'data'
 courseProviderNameListCsvFilePath = ''
 personNameListCsvFilePath = ''
 pdfFileName = ''
@@ -57,10 +58,10 @@ def ProgressBar(current, total):
     os.system('clear')
     progress = (current/total)*10
     print("Progress: [", "█"*int(progress), " "*(10-int(progress)), "\b] ~", int(progress*10), "%")
-    print("\File No. = ", current, ", File =", pdfFileName)
+    print("\nItem No. => ", current, "\nFilename => ", pdfFileName)
 
-def WorkspaceSetup(outputFolderPath):
-    os.makedirs(outputFolderPath+"/data")
+def WorkspaceSetup(outputFolderParentPath):
+    os.makedirs(outputFolderParentPath+'/'+outputFolderName)
 
 def Menu():
     os.system('clear')
@@ -108,8 +109,8 @@ def TextProcess(text):
 
     # Iterating Through Course Providers' List To Find The Match and Set Course Type
     for column in courseProviderNameListCsvFileColumnsList:
-        for index in enumerate(refinedTextWordsList,0):
-            if (str(column[0]).lower()) == (str(refinedTextWordsList[index]).lower()):
+        for refinedTextWord in refinedTextWordsList:
+            if (str(column[0]).lower()) == (str(refinedTextWord).lower()):
                 courseType=column[1]
 
     # Entity Variables
@@ -131,9 +132,9 @@ def TextProcess(text):
 
     # Iterating Through Person Name List To Find The Match and Set Course Type
     for column in personNameListCsvFileColumnsList:
-        for index in enumerate(personsNameList,0):
-            if (str(column[0]).lower()) == (str(personsNameList[index]).lower()):
-                personName = personsNameList[index]
+        for personsNameListItem in personsNameList:
+            if (str(column[0]).lower()) == (str(personsNameListItem).lower()):
+                personName = personsNameListItem
     
     # Generate Hyperlink To Unidentified Certificates
     if(personName == "UNIDENTIFIED"):
@@ -149,7 +150,7 @@ def CSVWriter():
     global isCsvHeaderWritten
     
     # Opening CSV File
-    scoreSheetCsvFile = open(outputFolderPath + "/Data/CertificateDetails.csv", 'a+')
+    scoreSheetCsvFile = open(outputFolderParentPath + '/' + outputFolderName + "/CertificateDetails.csv", 'a+')
     scoreSheetCsvFileWriter = csv.DictWriter(scoreSheetCsvFile, fieldnames = csvColumns)
 
     # Writing CSV Header
@@ -334,14 +335,14 @@ def LoadKTUScheme():
     week12Score = 50
 
 def Configuration():
-    global sourceFolderPath, outputFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfDataDictionary, isMarksCustomized
+    global sourceFolderPath, outputFolderParentPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfDataDictionary, isMarksCustomized
 
     # Input Parameters
     sourceFolderPath = input("\nCertificates Folder Path : ")
     courseProviderNameListCsvFilePath = input("Courses List CSV File Path : ")
     personNameListCsvFilePath = input("Name List CSV File Path : ")
     isMarksCustomized = True if (input("Do Want To Customize The Marking Scheme [DEFAULT SCHEME : KTU] (Y/N) ? : ").lower() == 'y') else False
-    outputFolderPath = input("Output Folder Path : ")
+    outputFolderParentPath = input("Output Folder Path : ")
 
 def FlushBuffers():
     global currentPdfDataDictionary
@@ -355,7 +356,7 @@ if __name__ == "__main__":
     Configuration()                                                                                           
 
     # Setting Up Workspace
-    WorkspaceSetup(outputFolderPath)
+    WorkspaceSetup(outputFolderParentPath)
 
     # Load Default Marking Scheme (KTU)
     LoadKTUScheme()
