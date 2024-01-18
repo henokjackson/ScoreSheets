@@ -1,16 +1,16 @@
-import os                                                                                               # LIBRARY FOR FOLDER OPERATIONS
-import csv                                                                                              # LIBRARY FOR CSV FILE OPERTIONS
+import os
+import csv
 import nltk
-import spacy                                                                                            # LIBRARY FOR NLP
-import string                                                                                           # LIBRARY FOR STRING OPERATIONS
-import PyPDF2                                                                                           # LIBRARY FOR READING NO.OF PAGES IN A PDF
-import multiprocessing                                                                                  # LIBRARY FOR GETTING CPU CORE COUNT
-import pdf2image as PDF                                                                                 # LIBRARY FOR CONVERTING PDF TO IMAGE
-from pathlib import Path                                                                                # LIBRARY FOR READING FILE EXTENSION FROM PATH
-import pytesseract as OCR                                                                               # LIBRARY FOR OCR
-from nltk.corpus import stopwords                                                                       # LIBRARY FOR DETERMINING STOPWORDS FROM TEXT
-from PIL import Image, ImageEnhance                                                                     # LIBRARY FOR IMAGE PROCESSING
-from nltk.tokenize import word_tokenize                                                                 # LIBRARY FOR TOKENIZATION OF TEXT
+import spacy
+import string
+import PyPDF2
+import pdf2image
+from pathlib import Path
+import pytesseract as OCR
+import multiprocessing as mulproc
+from nltk.corpus import stopwords
+from PIL import Image, ImageEnhance
+from nltk.tokenize import word_tokenize
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -138,7 +138,7 @@ def TextProcess(text):
     
     # Generate Hyperlink To Unidentified Certificates
     if(personName == "UNIDENTIFIED"):
-        currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+sourceFolderPath+"/"+pdfFileName+"\""+",\"NO_NAME\""+")"
+        currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+sourceFolderPath+"/"+pdfFileName+"\""+",\""+personName+"\""+")"
     else:
         currentPdfDataDictionary["Name"] = personName
     currentPdfDataDictionary["Course Type"] = courseType
@@ -308,7 +308,7 @@ def PDFDataExtract():
     pdfReader = PyPDF2.PdfReader(open(sourceFolderPath+"/"+pdfFileName,mode="rb"),strict=False)
 
     # Converting All Pages of PDF To List of Images
-    pdfPagesImgList = PDF.convert_from_path(sourceFolderPath+"/"+pdfFileName,thread_count=multiprocessing.cpu_count(),dpi=200,strict=False)
+    pdfPagesImgList = pdf2image.convert_from_path(sourceFolderPath+"/"+pdfFileName,thread_count=mulproc.cpu_count(),dpi=200,strict=False)
 
     # Processing Each Page
     for pdfCurrentPageNumber, pdfCurrentPageImage in enumerate(pdfPagesImgList,1):
