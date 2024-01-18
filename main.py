@@ -9,7 +9,7 @@ import pdf2image as PDF                                                         
 from pathlib import Path                                                                                # LIBRARY FOR READING FILE EXTENSION FROM PATH
 import pytesseract as OCR                                                                               # LIBRARY FOR OCR
 from nltk.corpus import stopwords                                                                       # LIBRARY FOR DETERMINING STOPWORDS FROM TEXT
-from PIL import Image,ImageEnhance                                                                      # LIBRARY FOR IMAGE PROCESSING
+from PIL import Image, ImageEnhance                                                                     # LIBRARY FOR IMAGE PROCESSING
 from nltk.tokenize import word_tokenize                                                                 # LIBRARY FOR TOKENIZATION OF TEXT
 
 nltk.download('stopwords')
@@ -18,7 +18,7 @@ nltk.download('punkt')
 imgContrastEnhanceFactor = 1.5
 imgSharpnessEnhanceFactor = 2
 
-currentPdfData = {}
+currentPdfDataDictionary = {}
 currentPdfDataList = []
 
 sourceFolderPath = ''
@@ -37,30 +37,33 @@ week2Score = 0
 week1Score = 0
 
 def ScoreAggregator():
-    if not currentPdfDataList: currentPdfDataList.append(currentPdfData)
+    if not currentPdfDataList:
+        currentPdfDataList.append(currentPdfDataDictionary)
     else:
-        flag=1
-        for no,item in enumerate(currentPdfDataList,0):                                                           # ITERATING OVER EACH DICTIONARY FROM DICTLIST
-            if(item["NAME"]==currentPdfData["NAME"] and item["COURSE TYPE"]==currentPdfData["COURSE TYPE"]):                # FOR SAME NAME AND COURSE TYPE MERGE POINTS
-                currentPdfData["POINTS"]+=item["POINTS"]                                                          # MERGING POINTS
-                currentPdfData["DURATION"]+=item["DURATION"]                                                      # MERGING WEEKS
-                currentPdfDataList[no]=currentPdfData                                                                       # APPENDING DICTIONARY TO LIST
-                flag=0
+        IsPersonDataExisting = False
+
+        # Aggregating Scores of Same Type of Courses Taken By The Same Person
+        for index, currentPdfDataListDictionaryItem in enumerate(currentPdfDataList, 0):
+            if(currentPdfDataListDictionaryItem["Name"] == currentPdfDataDictionary["Name"] and currentPdfDataListDictionaryItem["Course Type"] == currentPdfDataDictionary["Course Type"]):
+                currentPdfDataDictionary["Current Score"] += currentPdfDataListDictionaryItem["Current Score"]
+                currentPdfDataDictionary["Duration"] += currentPdfDataListDictionaryItem["Duration"]
+                currentPdfDataList[index] = currentPdfDataDictionary
+                IsPersonDataExisting = True
                 break
-        if flag==1:
-            currentPdfDataList.append(currentPdfData)
+        # Append Data of New Person
+        if not IsPersonDataExisting: currentPdfDataList.append(currentPdfDataDictionary)
 
-def ProgressBar(nue,den):                                                                                   # PROGRESS BAR
+def ProgressBar(current, total):
     os.system('clear')
-    prog=(nue/den)*10
-    print("Progress: [","█"*int(prog)," "*(10-int(prog)),"\b] ~",int(prog*10),"%")
-    print("\nNO =",nue,", File =",pdfFileName)
+    progress = (current/total)*10
+    print("Progress: [", "█"*int(progress), " "*(10-int(progress)), "\b] ~", int(progress*10), "%")
+    print("\File No. = ", current, ", File =", pdfFileName)
 
-def WorkspaceSetup(outputFolderPath):                                                                                 # WORKSPACE SETUP FUNCTION
-    os.makedirs(outputFolderPath+"/data")                                                                        # MAKING FOLDER CALLED Data FOR STORING ALL THE PROGRAM DATA
+def WorkspaceSetup(outputFolderPath):
+    os.makedirs(outputFolderPath+"/data")
 
-def Menu():                                                                                             # INTERFACE
-    os.system('cls')
+def Menu():
+    os.system('clear')
     print("\t"*3+"█"*58)
     print("\t"*3+"██"+"\t"*7+"██")
     print("\t"*3+"██"+"\t"*2+"CERTIFICATE POINT CALCULATOR"+"\t"*2+"██")
@@ -93,7 +96,6 @@ def TextPreProcess(text):
     return refinedText,refinedTextWordsList
 
 def TextProcess(text):
-
     # Setting Course Type Variable
     courseType="NON MOOC"
     
@@ -135,32 +137,41 @@ def TextProcess(text):
     
     # Generate Hyperlink To Unidentified Certificates
     if(personName == "UNIDENTIFIED"):
-        currentPdfData["NAME"] = "=HYPERLINK("+"\""+sourceFolderPath+"/"+pdfFileName+"\""+",\"NO_NAME\""+")"
+        currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+sourceFolderPath+"/"+pdfFileName+"\""+",\"NO_NAME\""+")"
     else:
-        currentPdfData["NAME"] = personName
-    currentPdfData["COURSE TYPE"] = courseType
+        currentPdfDataDictionary["Name"] = personName
+    currentPdfDataDictionary["Course Type"] = courseType
 
-def CSVWriter():                                                                                      # CONVERT DICT TO CSV
-    columns=['NAME','COURSE TYPE','DURATION','POINTS','TOTAL']
+def CSVWriter():
+    # Setting CSV File Columns Names
+    csvColumns = ['Name','Course Type','Duration','Current Score','Total Score']
+
     global isCsvHeaderWritten
-    with open(outputFolderPath+"/Data/CertificateDetails.csv",'a+') as csv_file:  
-        writer=csv.DictWriter(csv_file,fieldnames=columns)                                              # IMPORTING CSV FILE AND SETTING FIELDS
-        if not isCsvHeaderWritten:                                                                                  # CHECKING FOR HEADER FLAG
-            writer.writeheader()                                                                        # WRITING HEADER TO CSV
-            isCsvHeaderWritten=True                                                                                   # SETTING FLAG
-        for data in currentPdfDataList:
-            if (isMarksCustomized):
-                data["TOTAL"]=data["POINTS"]
+    
+    # Opening CSV File
+    scoreSheetCsvFile = open(outputFolderPath + "/Data/CertificateDetails.csv", 'a+')
+    scoreSheetCsvFileWriter = csv.DictWriter(scoreSheetCsvFile, fieldnames = csvColumns)
+
+    # Writing CSV Header
+    if not isCsvHeaderWritten:
+        scoreSheetCsvFileWriter.writeheader()
+        isCsvHeaderWritten = True
+    
+    # Calculating Total SCore
+    for data in currentPdfDataList:
+        if (isMarksCustomized):
+            data["Total Score"] = data["Current Score"]
+        else:
+            # Checking Total Score Restriction
+            if (data["Current Score"] >= 50):
+                data["Total Score"] = data["Current Score"]
+                data["Current Score"] = 50
             else:
-                if (data["POINTS"]>=50):
-                    data["TOTAL"]=data["POINTS"]                                                        # ADDING TOTAL POINTS
-                    data["POINTS"]=50                                                                   # CUTTING OF POINTS ABOVE 50
-                else:
-                    data["TOTAL"]=data["POINTS"]
-            writer.writerow(data)                                                                       # WRITING DICTIONARY DATA INTO CSV
+                data["Total Score"] = data["Current Score"]
+        # Writting Data To CSV
+        scoreSheetCsvFileWriter.writerow(data)
     
 def TextExtract(currentPageImage):
-
     # Read Text From Image
     text = OCR.image_to_string(currentPageImage)
     
@@ -195,7 +206,6 @@ def ScoreCalculator(courseDuration):
     return totalScore
 
 def CropImage(inputImage):
-
     # Get Image Size
     _, inputImageHeight = inputImage.size
     
@@ -205,7 +215,6 @@ def CropImage(inputImage):
     return outputImage
 
 def ScaleImage(inputImage):
-
     # Get Image Size
     inputImageWidth, inputImageHeight = inputImage.size 
 
@@ -231,7 +240,6 @@ def ScaleImage(inputImage):
     return outputImage
 
 def ParseWeeks(img):
-
     # Read Text From Image, Configuring To Read Large Fonts
     text = OCR.image_to_string(img, config='--psm 6')
 
@@ -247,7 +255,6 @@ def ParseWeeks(img):
     return courseDuration
 
 def GetCourseDuration(preprocessedpdfCurrentPageImage):
-
     # Crop The Required Area 
     preprocessedpdfCurrentPageImage = CropImage(preprocessedpdfCurrentPageImage) 
     
@@ -258,27 +265,25 @@ def GetCourseDuration(preprocessedpdfCurrentPageImage):
     courseDuration = ParseWeeks(preprocessedpdfCurrentPageImage)
 
     # Set Course Duration
-    currentPdfData["DURATION"] = courseDuration
+    currentPdfDataDictionary["Duration"] = courseDuration
 
     # Calculate Score
     totalScore = ScoreCalculator(courseDuration)
     
     # Set Scores
-    currentPdfData["POINTS"] = totalScore
+    currentPdfDataDictionary["Current Score"] = totalScore
 
 def CustomizeMarks():
-
     global week12Score, week6Score, week3Score, week2Score, week1Score
 
-    week12Score = int(input("INPUT MARKS FOR WEEK >= 12 WEEKS:"))
-    week6Score = int(input("INPUT MARKS FOR WEEK >= 6 WEEKS:"))
-    week3Score = int(input("INPUT MARKS FOR WEEK >= 3 WEEKS:"))
-    week2Score = int(input("INPUT MARKS FOR WEEK >= 2 WEEKS:"))
-    week1Score = int(input("INPUT MARKS FOR WEEK >= 1 WEEK :"))
+    week12Score = int(input("INPUT MARKS FOR WEEK > or = 12 WEEKS:"))
+    week6Score = int(input("INPUT MARKS FOR WEEK > or = 6 WEEKS:"))
+    week3Score = int(input("INPUT MARKS FOR WEEK > or = 3 WEEKS:"))
+    week2Score = int(input("INPUT MARKS FOR WEEK > or = 2 WEEKS:"))
+    week1Score = int(input("INPUT MARKS FOR WEEK > or = 1 WEEK :"))
 
 
 def ImagePreProcess(pdfCurrentPageImage):
-
     # Increase Image Contrast
     pdfCurrentPageImage = ImageEnhance.Contrast(pdfCurrentPageImage).enhance(imgContrastEnhanceFactor)
 
@@ -298,7 +303,6 @@ def ImagePreProcess(pdfCurrentPageImage):
     return pdfCurrentPageImage
 
 def PDFDataExtract():
-
     # Setting Up PDF Reader
     pdfReader = PyPDF2.PdfReader(open(sourceFolderPath+"/"+pdfFileName,mode="rb"),strict=False)
 
@@ -321,9 +325,8 @@ def PDFDataExtract():
             elif pdfCurrentPageNumber == len(pdfReader.pages): GetCourseDuration(preprocessedpdfCurrentPageImage)
 
 def LoadKTUScheme():
-
     global week12Score, week6Score, week3Score, week2Score, week1Score
-
+    
     week1Score = 3
     week2Score = 6
     week3Score = 12
@@ -331,22 +334,20 @@ def LoadKTUScheme():
     week12Score = 50
 
 def Configuration():
-
-    global sourceFolderPath, outputFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfData, isMarksCustomized
+    global sourceFolderPath, outputFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfDataDictionary, isMarksCustomized
 
     # Input Parameters
-    sourceFolderPath = input("\nENTER THE SOURCE FOLDER PATH : ")
-    outputFolderPath = input("ENTER THE WORKSPACE FOLDER PATH : ")
-    courseProviderNameListCsvFilePath = input("ENTER COURSE NAME LIST FILE PATH : ")
-    personNameListCsvFilePath = input("ENTER NAME LIST FILE PATH : ")
-    isMarksCustomized = True if (input("WOULD YOU LIKE TO CUSTOMIZE THE MARKING SCHEME FOR EACH WEEK (Y/N)? [DEFAULT SCHEME : KTU]").lower() == 'y') else False
+    sourceFolderPath = input("\nCertificates Folder Path : ")
+    courseProviderNameListCsvFilePath = input("Courses List CSV File Path : ")
+    personNameListCsvFilePath = input("Name List CSV File Path : ")
+    isMarksCustomized = True if (input("Do Want To Customize The Marking Scheme [DEFAULT SCHEME : KTU] (Y/N) ? : ").lower() == 'y') else False
+    outputFolderPath = input("Output Folder Path : ")
 
 def FlushBuffers():
-    global currentPdfData
-    currentPdfData = {}
+    global currentPdfDataDictionary
+    currentPdfDataDictionary = {}
 
 if __name__ == "__main__":
-
     # Render Main Menu
     Menu()   
 
@@ -364,11 +365,10 @@ if __name__ == "__main__":
 
     # Performing PDF Search and Parsing
     for index, pdfFileName in enumerate(os.listdir(sourceFolderPath),1):
-
-        fileExt = Path(pdfFileName).suffix.lower()
-
         # Update Progress
         ProgressBar(index, len(os.listdir(sourceFolderPath)))
+        
+        fileExt = Path(pdfFileName).suffix.lower()
         
         # PDF Parsing
         if fileExt == '.pdf': PDFDataExtract()
