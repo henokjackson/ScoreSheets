@@ -31,11 +31,19 @@ pdfFileName = ''
 isMarksCustomized = False
 isCsvHeaderWritten = False
 
+maximumScoreThreshold = 50
 week12Score = 0
 week6Score = 0 
 week3Score = 0 
 week2Score = 0 
 week1Score = 0
+
+clearScreenCommand = ''
+
+def SystemSetup():
+    global clearScreenCommand
+    if os.name == 'posix': clearScreenCommand = 'clear'
+    elif os.name == 'nt' : clearScreenCommand = 'cls'
 
 def ScoreAggregator():
     if not currentPdfDataList:
@@ -55,7 +63,7 @@ def ScoreAggregator():
         if not IsPersonDataExisting: currentPdfDataList.append(currentPdfDataDictionary)
 
 def ProgressBar(current, total):
-    os.system('clear')
+    os.system(clearScreenCommand)
     progress = (current/total)*10
     print("Progress: [", "█"*int(progress), " "*(10-int(progress)), "\b] ~", int(progress*10), "%")
     print("\nItem No. => ", current, "\nFilename => ", pdfFileName)
@@ -63,13 +71,13 @@ def ProgressBar(current, total):
 def WorkspaceSetup(outputFolderParentPath):
     os.makedirs(outputFolderParentPath+'/'+outputFolderName)
 
-def Menu():
-    os.system('clear')
-    print("\t"*3+"█"*58)
-    print("\t"*3+"██"+"\t"*7+"██")
-    print("\t"*3+"██"+"\t"*2+"CERTIFICATE POINT CALCULATOR"+"\t"*2+"██")
-    print("\t"*3+"██"+"\t"*7+"██")
-    print("\t"*3+"█"*58)
+def Banner():
+    os.system(clearScreenCommand)
+    print("█"*50)
+    print("██"+"\t"*6+"██")
+    print("██"+"\t"*2+"ScoreSheets v1.0"+"\t"*2+"██")
+    print("██"+"\t"*6+"██")
+    print("█"*50)
 
 def TextPreProcess(text):
     # Junk Removal
@@ -164,9 +172,9 @@ def CSVWriter():
             data["Total Score"] = data["Current Score"]
         else:
             # Checking Total Score Restriction
-            if (data["Current Score"] >= 50):
+            if (data["Current Score"] >= maximumScoreThreshold):
                 data["Total Score"] = data["Current Score"]
-                data["Current Score"] = 50
+                data["Current Score"] = maximumScoreThreshold
             else:
                 data["Total Score"] = data["Current Score"]
         # Writting Data To CSV
@@ -274,16 +282,6 @@ def GetCourseDuration(preprocessedpdfCurrentPageImage):
     # Set Scores
     currentPdfDataDictionary["Current Score"] = totalScore
 
-def CustomizeMarks():
-    global week12Score, week6Score, week3Score, week2Score, week1Score
-
-    week12Score = int(input("INPUT MARKS FOR WEEK > or = 12 WEEKS:"))
-    week6Score = int(input("INPUT MARKS FOR WEEK > or = 6 WEEKS:"))
-    week3Score = int(input("INPUT MARKS FOR WEEK > or = 3 WEEKS:"))
-    week2Score = int(input("INPUT MARKS FOR WEEK > or = 2 WEEKS:"))
-    week1Score = int(input("INPUT MARKS FOR WEEK > or = 1 WEEK :"))
-
-
 def ImagePreProcess(pdfCurrentPageImage):
     # Increase Image Contrast
     pdfCurrentPageImage = ImageEnhance.Contrast(pdfCurrentPageImage).enhance(imgContrastEnhanceFactor)
@@ -328,11 +326,22 @@ def PDFDataExtract():
 def LoadKTUScheme():
     global week12Score, week6Score, week3Score, week2Score, week1Score
     
+    # Setting Marking Scheme
     week1Score = 3
     week2Score = 6
     week3Score = 12
     week6Score = 25
     week12Score = 50
+
+def CustomizeMarks():
+    global week12Score, week6Score, week3Score, week2Score, week1Score
+
+    # Setting Marking Scheme
+    week12Score = int(input("INPUT MARKS FOR WEEK > or = 12 WEEKS : "))
+    week6Score = int(input("INPUT MARKS FOR WEEK > or = 6 WEEKS : "))
+    week3Score = int(input("INPUT MARKS FOR WEEK > or = 3 WEEKS : "))
+    week2Score = int(input("INPUT MARKS FOR WEEK > or = 2 WEEKS : "))
+    week1Score = int(input("INPUT MARKS FOR WEEK > or = 1 WEEK : "))
 
 def Configuration():
     global sourceFolderPath, outputFolderParentPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, pdfFileName, currentPdfDataDictionary, isMarksCustomized
@@ -349,11 +358,14 @@ def FlushBuffers():
     currentPdfDataDictionary = {}
 
 if __name__ == "__main__":
-    # Render Main Menu
-    Menu()   
+    # Setting Up System Parameters
+    SystemSetup()
+
+    # Render Main Screen
+    Banner()
 
     # Input Configuration
-    Configuration()                                                                                           
+    Configuration()
 
     # Setting Up Workspace
     WorkspaceSetup(outputFolderParentPath)
