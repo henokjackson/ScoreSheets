@@ -201,7 +201,7 @@ def ScoreCalculator(courseDuration):
         courseDurationClone -= 6
 
     while(courseDurationClone >= 3):
-        totalScore += int(week3Score)
+        totalScore += week3Score
         courseDurationClone -= 3
     
     while(courseDurationClone >= 2):
