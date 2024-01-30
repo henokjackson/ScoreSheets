@@ -1,8 +1,6 @@
-from PIL import Image, ImageEnhance
+import globals
 import pytesseract as OCR
-
-imgContrastEnhanceFactor = 1.5
-imgSharpnessEnhanceFactor = 2
+from PIL import Image, ImageEnhance
 
 def CropImage(inputImage):
     # Get Image Size
@@ -40,10 +38,10 @@ def ScaleImage(inputImage):
 
 def ImagePreProcess(pdfCurrentPageImage):
     # Increase Image Contrast
-    pdfCurrentPageImage = ImageEnhance.Contrast(pdfCurrentPageImage).enhance(imgContrastEnhanceFactor)
+    pdfCurrentPageImage = ImageEnhance.Contrast(pdfCurrentPageImage).enhance(globals.imgContrastEnhanceFactor)
 
     # Increase Image Sharpness
-    pdfCurrentPageImage = ImageEnhance.Sharpness(pdfCurrentPageImage).enhance(imgSharpnessEnhanceFactor)
+    pdfCurrentPageImage = ImageEnhance.Sharpness(pdfCurrentPageImage).enhance(globals.imgSharpnessEnhanceFactor)
 
     # Convert Image To Grayscale
     pdfCurrentPageImage = pdfCurrentPageImage.convert('L')

@@ -1,17 +1,10 @@
 import csv
 import spacy
 import string
+import globals
 import pytesseract as OCR
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-
-currentPdfDataDictionary = {}
-currentPdfDataList = []
-
-sourceFolderPath = ''
-courseProviderNameListCsvFilePath = ''
-personNameListCsvFilePath = ''
-pdfFileName = ''
 
 def TextPreProcess(text):
     # Junk Removal
@@ -46,7 +39,7 @@ def TextProcess(text):
     refinedText, refinedTextWordsList = TextPreProcess(text)
 
     # Open Course Provider Listing File
-    courseProviderNameListCsvFile = open(courseProviderNameListCsvFilePath)
+    courseProviderNameListCsvFile = open(globals.courseProviderNameListCsvFilePath)
     courseProviderNameListCsvFileColumnsList = csv.reader(courseProviderNameListCsvFile)
 
     # Iterating Through Course Providers' List To Find The Match and Set Course Type
@@ -69,7 +62,7 @@ def TextProcess(text):
             personsNameList.append(name.text)
 
     # Opening Persons' Name Listing File
-    personNameListCsvFile = open(personNameListCsvFilePath)
+    personNameListCsvFile = open(globals.personNameListCsvFilePath)
     personNameListCsvFileColumnsList = csv.reader(personNameListCsvFile)
 
     # Iterating Through Person Name List To Find The Match and Set Course Type
@@ -80,10 +73,10 @@ def TextProcess(text):
     
     # Generate Hyperlink To Unidentified Certificates
     if(personName == "UNIDENTIFIED"):
-        currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+sourceFolderPath+"/"+pdfFileName+"\""+",\""+personName+"\""+")"
+        globals.currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+globals.sourceFolderPath+"/"+globals.pdfFileName+"\""+",\""+personName+"\""+")"
     else:
-        currentPdfDataDictionary["Name"] = personName
-    currentPdfDataDictionary["Course Type"] = courseType
+        globals.currentPdfDataDictionary["Name"] = personName
+    globals.currentPdfDataDictionary["Course Type"] = courseType
 
 def TextExtract(currentPageImage):
     # Read Text From Image

@@ -1,27 +1,14 @@
 import os
 import nltk
+import globals
 from pathlib import Path
+from Elements import Banner, ProgressBar
+from FileIO import CSVWriter, PDFDataExtract
+from ScoreCalculation import CustomizeMarks, LoadKTUScheme, ScoreAggregator
+from Configuration import Configuration, FlushBuffers, SystemSetup, WorkspaceSetup
 
 nltk.download('stopwords')
 nltk.download('punkt')
-
-currentPdfDataDictionary = {}
-currentPdfDataList = []
-
-sourceFolderPath = ''
-outputFolderParentPath = ''
-outputFolderName = 'data'
-courseProviderNameListCsvFilePath = ''
-personNameListCsvFilePath = ''
-pdfFileName = ''
-
-isMarksCustomized = False
-isCsvHeaderWritten = False
-
-maximumScoreThreshold = 50
-
-clearScreenCommand = ''
-
 
 if __name__ == "__main__":
     # Setting Up System Parameters
@@ -34,20 +21,20 @@ if __name__ == "__main__":
     Configuration()
 
     # Setting Up Workspace
-    WorkspaceSetup(outputFolderParentPath)
+    WorkspaceSetup(globals.outputFolderParentPath)
 
     # Load Default Marking Scheme (KTU)
     LoadKTUScheme()
 
     # Customize Marking Scheme
-    if isMarksCustomized: CustomizeMarks()
+    if globals.isMarksCustomized: CustomizeMarks()
 
     # Performing PDF Search and Parsing
-    for index, pdfFileName in enumerate(os.listdir(sourceFolderPath),1):
+    for index, globals.pdfFileName in enumerate(os.listdir(globals.sourceFolderPath),1):
         # Update Progress
-        ProgressBar(index, len(os.listdir(sourceFolderPath)))
+        ProgressBar(index, len(os.listdir(globals.sourceFolderPath)))
         
-        fileExt = Path(pdfFileName).suffix.lower()
+        fileExt = Path(globals.pdfFileName).suffix.lower()
         
         # PDF Parsing
         if fileExt == '.pdf': PDFDataExtract()

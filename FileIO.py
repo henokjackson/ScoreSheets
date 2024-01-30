@@ -1,47 +1,35 @@
 import csv
 import PyPDF2
+import globals
 import pdf2image
 import multiprocessing as mulproc
+from TextProcessing import TextExtract
+from ImageProcessing import ImagePreProcess
+from ScoreCalculation import GetCourseDuration
 
-sourceFolderPath = ''
-outputFolderParentPath = ''
-outputFolderName = 'data'
-courseProviderNameListCsvFilePath = ''
-personNameListCsvFilePath = ''
-pdfFileName = ''
-
-isMarksCustomized = False
-isCsvHeaderWritten = False
-
-maximumScoreThreshold = 50
-
-currentPdfDataDictionary = {}
-currentPdfDataList = []
 
 def CSVWriter():
     # Setting CSV File Columns Names
     csvColumns = ['Name','Course Type','Duration','Current Score','Total Score']
-
-    global isCsvHeaderWritten
     
     # Opening CSV File
-    scoreSheetCsvFile = open(outputFolderParentPath + '/' + outputFolderName + "/CertificateDetails.csv", 'a+')
+    scoreSheetCsvFile = open(globals.outputFolderParentPath + '/' + globals.outputFolderName + "/CertificateDetails.csv", 'a+')
     scoreSheetCsvFileWriter = csv.DictWriter(scoreSheetCsvFile, fieldnames = csvColumns)
 
     # Writing CSV Header
-    if not isCsvHeaderWritten:
+    if not globals.isCsvHeaderWritten:
         scoreSheetCsvFileWriter.writeheader()
-        isCsvHeaderWritten = True
+        globals.isCsvHeaderWritten = True
     
     # Calculating Total SCore
-    for data in currentPdfDataList:
-        if (isMarksCustomized):
+    for data in globals.currentPdfDataList:
+        if (globals.isMarksCustomized):
             data["Total Score"] = data["Current Score"]
         else:
             # Checking Total Score Restriction
-            if (data["Current Score"] >= maximumScoreThreshold):
+            if (data["Current Score"] >= globals.maximumScoreThreshold):
                 data["Total Score"] = data["Current Score"]
-                data["Current Score"] = maximumScoreThreshold
+                data["Current Score"] = globals.maximumScoreThreshold
             else:
                 data["Total Score"] = data["Current Score"]
         # Writting Data To CSV
@@ -49,10 +37,10 @@ def CSVWriter():
 
 def PDFDataExtract():
     # Setting Up PDF Reader
-    pdfReader = PyPDF2.PdfReader(open(sourceFolderPath+"/"+pdfFileName,mode="rb"),strict=False)
+    pdfReader = PyPDF2.PdfReader(open(globals.sourceFolderPath+"/"+globals.pdfFileName,mode="rb"),strict=False)
 
     # Converting All Pages of PDF To List of Images
-    pdfPagesImgList = pdf2image.convert_from_path(sourceFolderPath+"/"+pdfFileName,thread_count=mulproc.cpu_count(),dpi=200,strict=False)
+    pdfPagesImgList = pdf2image.convert_from_path(globals.sourceFolderPath+"/"+globals.pdfFileName,thread_count=mulproc.cpu_count(),dpi=200,strict=False)
 
     # Processing Each Page
     for pdfCurrentPageNumber, pdfCurrentPageImage in enumerate(pdfPagesImgList,1):
