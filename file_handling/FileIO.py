@@ -1,11 +1,11 @@
 import csv
 import PyPDF2
-import globals
 import pdf2image
+from config import globals
 import multiprocessing as mulproc
-from TextProcessing import TextExtract
-from ImageProcessing import ImagePreProcess
-from ScoreCalculation import GetCourseDuration
+from text_processing.TextProcessing import TextExtract
+from image_processing.ImageProcessing import ImagePreProcess
+from score_calculation.ScoreCalculation import GetCourseDuration
 
 
 def CSVWriter():

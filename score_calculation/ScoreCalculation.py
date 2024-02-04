@@ -1,6 +1,6 @@
-import globals
-from TextProcessing import ParseWeeks
-from ImageProcessing import CropImage, ScaleImage
+from config import globals
+from text_processing.TextProcessing import ParseWeeks
+from image_processing.ImageProcessing import CropImage, ScaleImage
 
 def LoadKTUScheme():
     

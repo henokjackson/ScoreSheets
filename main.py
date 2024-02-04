@@ -1,11 +1,11 @@
 import os
 import nltk
-import globals
 from pathlib import Path
-from Elements import Banner, ProgressBar
-from FileIO import CSVWriter, PDFDataExtract
-from ScoreCalculation import CustomizeMarks, LoadKTUScheme, ScoreAggregator
-from Configuration import Configuration, FlushBuffers, SystemSetup, WorkspaceSetup
+from config import globals
+from ui.Elements import Banner, ProgressBar
+from file_handling.FileIO import CSVWriter, PDFDataExtract
+from score_calculation.ScoreCalculation import CustomizeMarks, LoadKTUScheme, ScoreAggregator
+from config.Configuration import Configuration, FlushBuffers, SystemSetup, WorkspaceSetup
 
 nltk.download('stopwords')
 nltk.download('punkt')

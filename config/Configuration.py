@@ -1,5 +1,5 @@
 import os
-import globals
+from config import globals
 
 def SystemSetup():
     if os.name == "posix": globals.clearScreenCommand = 'clear'

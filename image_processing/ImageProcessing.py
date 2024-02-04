@@ -1,5 +1,5 @@
-import globals
 import pytesseract as OCR
+from config import globals
 from PIL import Image, ImageEnhance
 
 def CropImage(inputImage):

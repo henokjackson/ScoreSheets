@@ -1,8 +1,8 @@
 import csv
 import spacy
 import string
-import globals
 import pytesseract as OCR
+from config import globals
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 

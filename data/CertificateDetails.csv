@@ -1,0 +1,13 @@
+Name,Course Type,Duration,Current Score,Total Score
+Gloria Joseph,MOOC,11,42,42
+Jans Johnson,MOOC,41,50,165
+Jessica George,MOOC,15,50,59
+"=HYPERLINK(""test_data/Coursera3.pdf"",""UNIDENTIFIED"")",MOOC,0,0,0
+Maria Rojo Jose,MOOC,14,50,56
+"=HYPERLINK(""test_data/Jithin Mathew_RET19CS107(1).pdf"",""UNIDENTIFIED"")",MOOC,5,18,18
+"=HYPERLINK(""test_data/Coursera2.pdf"",""UNIDENTIFIED"")",MOOC,0,0,0
+Emilin Antony,MOOC,0,0,0
+"=HYPERLINK(""test_data/Coursera 7XN57DWCD6QR-1.pdf"",""UNIDENTIFIED"")",MOOC,4,15,15
+Henok Jackson,MOOC,5,18,18
+Jesbin Joseph,MOOC,1,3,3
+Jisha Joseph,MOOC,6,25,25
