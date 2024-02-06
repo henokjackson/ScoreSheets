@@ -1,1 +1,9 @@
-data/CertificateDetails.csv
+data/
+config/__pycache__
+file_handling/__pycache__
+image_processing/__pycache__
+score_calculation/__pycache__
+test_data/
+text_processing/__pycache__
+ui/__pycache__
+.vscode
