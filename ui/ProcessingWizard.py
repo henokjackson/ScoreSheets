@@ -41,6 +41,7 @@ class Ui_Form(object):
         self.file_no_label.setText(_translate("Form", "File No.  :"))
         self.file_name_label_2.setText(_translate("Form", "Sample.pdf"))
         self.file_name_label_3.setText(_translate("Form", "1"))
+        
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()

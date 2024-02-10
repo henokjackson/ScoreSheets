@@ -114,6 +114,14 @@ class Ui_MainWindow(object):
         self.settings_pushButton.setIcon(icon1)
         self.settings_pushButton.setIconSize(QtCore.QSize(32, 32))
         self.settings_pushButton.setObjectName("settings_pushButton")
+        self.credits_pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.credits_pushButton.setGeometry(QtCore.QRect(10, 360, 31, 31))
+        self.credits_pushButton.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("../assets/misc/copyleft.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.credits_pushButton.setIcon(icon2)
+        self.credits_pushButton.setIconSize(QtCore.QSize(28, 28))
+        self.credits_pushButton.setObjectName("credits_pushButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -133,6 +141,7 @@ class Ui_MainWindow(object):
         self.process_pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:400;\">Perform Score Calculation</span></p></body></html>"))
         self.process_pushButton.setText(_translate("MainWindow", "Calculate"))
         self.settings_pushButton.setToolTip(_translate("MainWindow", "Settings"))
+        self.credits_pushButton.setToolTip(_translate("MainWindow", "Credits"))
 
 
 if __name__ == "__main__":
