@@ -7,3 +7,4 @@ test_data/
 text_processing/__pycache__
 ui/__pycache__
 .vscode
+ui/*.ui
