@@ -3,6 +3,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 # Loading Messages Index
 index = 0
+timer = QtCore.QTimer()
+Form = None
+ui = None
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -11,13 +14,13 @@ class Ui_Form(object):
         Form.setFixedSize(537, 265)
         Form.setWindowTitle("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../assets/logo/Icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("assets/logo/Icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         Form.setStyleSheet("background-color: rgb(236, 234, 231);")
         self.logo_label = QtWidgets.QLabel(Form)
         self.logo_label.setGeometry(QtCore.QRect(-100, 60, 701, 151))
         self.logo_label.setText("")
-        self.logo_label.setPixmap(QtGui.QPixmap("../assets/logo/Logo.png"))
+        self.logo_label.setPixmap(QtGui.QPixmap("assets/logo/Logo.png"))
         self.logo_label.setObjectName("logo_label")
         self.version_label = QtWidgets.QLabel(Form)
         self.version_label.setGeometry(QtCore.QRect(470, 240, 61, 17))
@@ -41,7 +44,7 @@ class Ui_Form(object):
         self.version_label.setText(_translate("Form", "Version 1.0"))
 
 def Loading():
-    global index
+    global index, Form, ui, timer
     loadingOptions = ["Loading assets...", "Loading coniguration...", "Setting up workspace...", "Clearing up cache...", ]
     
     if index < len(loadingOptions):
@@ -52,7 +55,8 @@ def Loading():
         Form.close()
         return
 
-if __name__ == "__main__":
+def Start():
+    global index, Form, ui, timer
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
@@ -60,8 +64,7 @@ if __name__ == "__main__":
     Form.show()
 
     # Load Message Updater
-    timer = QtCore.QTimer()
     timer.timeout.connect(Loading)
-    timer.start(400)
+    timer.start(300)
 
-    sys.exit(app.exec_())
+    app.exec_()

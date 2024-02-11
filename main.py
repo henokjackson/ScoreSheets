@@ -2,6 +2,7 @@ import os
 import nltk
 from pathlib import Path
 from config import globals
+from ui import LoadingScreen, MainScreen
 from ui.Elements import Banner, ProgressBar
 from file_handling.FileIO import CSVWriter, PDFDataExtract
 from score_calculation.ScoreCalculation import CustomizeMarks, LoadKTUScheme, ScoreAggregator
@@ -11,11 +12,17 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 if __name__ == "__main__":
+    # Load Splash Screen
+    LoadingScreen.Start()
+
     # Setting Up System Parameters
     SystemSetup()
 
     # Render Main Screen
     Banner()
+
+    # Render Main Screen
+    MainScreen.Start()
 
     # Input Configuration
     Configuration()
