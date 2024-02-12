@@ -1,5 +1,7 @@
 import sys
+from threading import Thread
 from PyQt5 import QtCore, QtGui, QtWidgets
+from ui.LoadingScreenController import InitProcesses
 
 # Loading Messages Index
 index = 0
@@ -67,4 +69,8 @@ def Start():
     timer.timeout.connect(Loading)
     timer.start(300)
 
+    # InitProcesses Thread
+    InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - LoadingScreen')
+    InitProcesses_Thread.start()
     app.exec_()
+    InitProcesses_Thread.join()

@@ -15,15 +15,6 @@ if __name__ == "__main__":
     # Load Splash Screen
     LoadingScreen.Start()
 
-    # Clear Cache
-    ClearCache()
-
-    # Setting Up System Parameters
-    SystemSetup()
-
-    # Render Main Screen
-    Banner()
-
     # Render Main Screen
     MainScreen.Start()
 

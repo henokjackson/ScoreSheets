@@ -6,16 +6,16 @@ def SystemSetup():
     if os.name == "posix": globals.clearScreenCommand = 'clear'
     elif os.name == "nt" : globals.clearScreenCommand = 'cls'
 
-def WorkspaceSetup(outputFolderParentPath):
-    os.makedirs(outputFolderParentPath+'/'+globals.outputFolderName)
+def WorkspaceSetup():
+    os.makedirs(globals.outputFolderParentPath+'/'+globals.outputFolderName)
 
-def Configuration():
+def Configuration(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath):
     # Input Parameters
-    globals.sourceFolderPath = input("\nCertificates Folder Path : ")
-    globals.courseProviderNameListCsvFilePath = input("Courses List CSV File Path : ")
-    globals.personNameListCsvFilePath = input("Name List CSV File Path : ")
-    globals.isMarksCustomized = True if (input("Do Want To Customize The Marking Scheme [DEFAULT SCHEME : KTU] (Y/N) ? : ").lower() == 'y') else False
-    globals.outputFolderParentPath = input("Output Folder Path : ")
+    globals.sourceFolderPath = sourceFolderPath
+    globals.courseProviderNameListCsvFilePath = courseProviderNameListCsvFilePath
+    globals.personNameListCsvFilePath = personNameListCsvFilePath
+    globals.isMarksCustomized = isMarksCustomized
+    globals.outputFolderParentPath = outputFolderParentPath
 
 def FlushBuffers():
     globals.currentPdfDataDictionary = {}

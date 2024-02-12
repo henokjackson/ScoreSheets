@@ -1,5 +1,7 @@
 import sys
+from threading import Thread
 from PyQt5 import QtCore, QtGui, QtWidgets
+from ui.MainScreenController import InitProcesses
 from ui import SettingsDialog, CreditsDialog, ProcessingDialog
 
 class Ui_MainWindow(object):
@@ -112,7 +114,7 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.process_pushButton.setFont(font)
         self.process_pushButton.setObjectName("process_pushButton")
-        self.process_pushButton.clicked.connect(ProcessingDialog.Start)
+        self.process_pushButton.clicked.connect(self.OnProcessButtonClick)
         self.settings_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.settings_pushButton.setGeometry(QtCore.QRect(380, 360, 31, 31))
         self.settings_pushButton.setText("")
@@ -168,6 +170,20 @@ class Ui_MainWindow(object):
         courseListFilePath = QtWidgets.QFileDialog.getOpenFileName()
         self.courses_list_lineEdit.setText(courseListFilePath[0])
 
+    def OnProcessButtonClick(self):
+        # Getting Parameters
+        sourceFolderPath = self.source_folder_path_lineEdit.text
+        courseProviderNameListCsvFilePath = self.courses_list_lineEdit.text
+        personNameListCsvFilePath = self.name_list_lineEdit.text
+        isMarksCustomized = False
+        outputFolderParentPath = self.destination_folder_lineEdit.text
+
+        # InitProcesses Thread
+        InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+        InitProcesses_Thread.start()
+        InitProcesses_Thread.join()
+
+        ProcessingDialog.Start()
 
 def Start():
     app = QtWidgets.QApplication(sys.argv)
