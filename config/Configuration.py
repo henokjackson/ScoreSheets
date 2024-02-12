@@ -1,4 +1,5 @@
 import os
+from shutil import rmtree
 from config import globals
 
 def SystemSetup():
@@ -18,3 +19,11 @@ def Configuration():
 
 def FlushBuffers():
     globals.currentPdfDataDictionary = {}
+
+def ClearCache():
+    rmtree("config/__pycache__")
+    rmtree("file_handling/__pycache__")
+    rmtree("image_processing/__pycache__")
+    rmtree("score_calculation/__pycache__")
+    rmtree("text_processing/__pycache__")
+    rmtree("ui/__pycache__")

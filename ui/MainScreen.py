@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui import SettingsDialog, CreditsDialog
+from ui import SettingsDialog, CreditsDialog, ProcessingDialog
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -112,6 +112,7 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.process_pushButton.setFont(font)
         self.process_pushButton.setObjectName("process_pushButton")
+        self.process_pushButton.clicked.connect(ProcessingDialog.Start)
         self.settings_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.settings_pushButton.setGeometry(QtCore.QRect(380, 360, 31, 31))
         self.settings_pushButton.setText("")

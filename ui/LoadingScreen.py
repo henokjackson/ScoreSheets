@@ -45,7 +45,7 @@ class Ui_Form(object):
 
 def Loading():
     global index, Form, ui, timer
-    loadingOptions = ["Loading assets...", "Loading coniguration...", "Setting up workspace...", "Clearing up cache...", ]
+    loadingOptions = ["Loading assets...", "Loading coniguration...", "Clearing up cache...", "Setting up workspace..." ]
     
     if index < len(loadingOptions):
         ui.loading_label.setText(loadingOptions[index])
