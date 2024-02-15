@@ -1,3 +1,5 @@
+from config import globals
+from multiprocessing import cpu_count
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Dialog(object):
@@ -8,7 +10,7 @@ class Ui_Dialog(object):
         icon.addPixmap(QtGui.QPixmap("assets/misc/gear.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
         Dialog.setStyleSheet("background-color: rgb(236, 234, 231);")
-        Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        #Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.outputfile_label = QtWidgets.QLabel(Dialog)
         self.outputfile_label.setGeometry(QtCore.QRect(60, 100, 161, 17))
         self.outputfile_label.setObjectName("outputfile_label")
@@ -16,8 +18,9 @@ class Ui_Dialog(object):
         self.markingschemefile_label.setGeometry(QtCore.QRect(50, 130, 171, 17))
         self.markingschemefile_label.setObjectName("markingschemefile_label")
         self.apply_pushButton = QtWidgets.QPushButton(Dialog)
-        self.apply_pushButton.setGeometry(QtCore.QRect(130, 300, 89, 25))
+        self.apply_pushButton.setGeometry(QtCore.QRect(186, 300, 89, 25))
         self.apply_pushButton.setObjectName("apply_pushButton")
+        self.apply_pushButton.clicked.connect(self.ApplySettings)
         self.threadnoun_label = QtWidgets.QLabel(Dialog)
         self.threadnoun_label.setGeometry(QtCore.QRect(330, 70, 51, 17))
         font = QtGui.QFont()
@@ -64,13 +67,10 @@ class Ui_Dialog(object):
         self.threadcount_label = QtWidgets.QLabel(Dialog)
         self.threadcount_label.setGeometry(QtCore.QRect(50, 70, 241, 17))
         self.threadcount_label.setObjectName("threadcount_label")
-        self.close_pushButton = QtWidgets.QPushButton(Dialog)
-        self.close_pushButton.setGeometry(QtCore.QRect(240, 300, 89, 25))
-        self.close_pushButton.setObjectName("close_pushButton")
         self.noofthreads_lineEdit = QtWidgets.QLineEdit(Dialog)
         self.noofthreads_lineEdit.setGeometry(QtCore.QRect(300, 70, 21, 20))
         self.noofthreads_lineEdit.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.noofthreads_lineEdit.setText("")
+        self.noofthreads_lineEdit.setText(str(globals.noOfThreads))
         self.noofthreads_lineEdit.setObjectName("noofthreads_lineEdit")
         self.devmsgimg_label = QtWidgets.QLabel(Dialog)
         self.devmsgimg_label.setGeometry(QtCore.QRect(110, 220, 241, 61))
@@ -106,7 +106,22 @@ class Ui_Dialog(object):
         self.browse_pushButton.setText(_translate("Dialog", "..."))
         self.title_label.setText(_translate("Dialog", "Configuration"))
         self.threadcount_label.setText(_translate("Dialog", "No. of Threads for PDF Extraction : "))
-        self.close_pushButton.setText(_translate("Dialog", "Close"))
+
+    def ThreadCountExceededErrorMessage(self):
+        noOfThreadCountExceededMessageBox = QtWidgets.QMessageBox()
+        noOfThreadCountExceededMessageBox.setIcon(QtWidgets.QMessageBox.Critical)
+        noOfThreadCountExceededMessageBox.setText("Thread count exceeds maximum count of (" + str(cpu_count()) +"), Please change the thread count.")
+        noOfThreadCountExceededMessageBox.setWindowTitle("Warning - Cannot Apply Settings")
+        noOfThreadCountExceededMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        noOfThreadCountExceededMessageBox.exec_()
+
+    def ApplySettings(self):
+        noOfThreads = int(self.noofthreads_lineEdit.text())
+        if noOfThreads > cpu_count():
+            self.ThreadCountExceededErrorMessage()
+        else:
+            globals.noOfThreads = noOfThreads
+            globals.markingSchemeFilePath = self.markingschemefile_lineEdit.text()
 
 def Start():
     dialog = QtWidgets.QDialog()

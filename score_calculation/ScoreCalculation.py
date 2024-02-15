@@ -3,7 +3,6 @@ from text_processing.TextProcessing import ParseWeeks
 from image_processing.ImageProcessing import CropImage, ScaleImage
 
 def LoadKTUScheme():
-    
     # Setting Marking Scheme
     globals.week1Score = 3
     globals.week2Score = 6
@@ -12,7 +11,6 @@ def LoadKTUScheme():
     globals.week12Score = 50
 
 def CustomizeMarks():
-
     # Setting Marking Scheme
     globals.week12Score = int(input("INPUT MARKS FOR WEEK > or = 12 WEEKS : "))
     globals.week6Score = int(input("INPUT MARKS FOR WEEK > or = 6 WEEKS : "))
@@ -21,7 +19,6 @@ def CustomizeMarks():
     globals.week1Score = int(input("INPUT MARKS FOR WEEK > or = 1 WEEK : "))
 
 def ScoreCalculator(courseDuration):
-    
     courseDurationClone = courseDuration
     totalScore = 0
 

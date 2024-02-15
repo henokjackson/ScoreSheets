@@ -1,5 +1,5 @@
 # Import File For Global Variables
-
+from multiprocessing import cpu_count
 # Data Holders
 currentPdfDataDictionary = {}
 currentPdfDataList = []
@@ -25,3 +25,10 @@ maximumScoreThreshold = 50
 
 # OS Parameters
 clearScreenCommand = ''
+
+# Performance Parameters
+noOfThreads = cpu_count()
+pdfDPI = 200
+
+# UI Parameters
+markingSchemeFilePath = 'KTU Marking Scheme (default)'
