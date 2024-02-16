@@ -181,7 +181,6 @@ class Ui_MainWindow(object):
         # InitProcesses Thread
         InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
         InitProcesses_Thread.start()
-        InitProcesses_Thread.join()
 
         ProcessingDialog.Start()
 
