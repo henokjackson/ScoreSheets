@@ -13,7 +13,7 @@ def CSVWriter():
     csvColumns = ['Name','Course Type','Duration','Current Score','Total Score']
     
     # Opening CSV File
-    scoreSheetCsvFile = open(globals.outputFolderParentPath + '/' + globals.outputFolderName + "/CertificateDetails.csv", "a+")
+    scoreSheetCsvFile = open(globals.outputFolderParentPath + '/' + globals.outputFolderName + "/" + globals.outputFileName + ".csv", "a+")
     scoreSheetCsvFileWriter = csv.DictWriter(scoreSheetCsvFile, fieldnames = csvColumns)
 
     # Writing CSV Header

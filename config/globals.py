@@ -8,6 +8,7 @@ currentPdfDataList = []
 sourceFolderPath = None
 outputFolderParentPath = '.'
 outputFolderName = 'data'
+outputFileName = 'ScoreSheet'
 courseProviderNameListCsvFilePath = None
 personNameListCsvFilePath = None
 pdfFileName = None

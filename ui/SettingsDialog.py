@@ -14,6 +14,9 @@ class Ui_Dialog(object):
         self.outputfile_label = QtWidgets.QLabel(Dialog)
         self.outputfile_label.setGeometry(QtCore.QRect(60, 100, 161, 17))
         self.outputfile_label.setObjectName("outputfile_label")
+        self.outputfileext_label = QtWidgets.QLabel(Dialog)
+        self.outputfileext_label.setGeometry(QtCore.QRect(397, 100, 161, 17))
+        self.outputfileext_label.setObjectName("outputfileext_label")
         self.markingschemefile_label = QtWidgets.QLabel(Dialog)
         self.markingschemefile_label.setGeometry(QtCore.QRect(50, 130, 171, 17))
         self.markingschemefile_label.setObjectName("markingschemefile_label")
@@ -40,6 +43,7 @@ class Ui_Dialog(object):
         self.outputfilename_lineEdit.setGeometry(QtCore.QRect(230, 100, 161, 20))
         self.outputfilename_lineEdit.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.outputfilename_lineEdit.setObjectName("outputfilename_lineEdit")
+        self.outputfilename_lineEdit.setText(globals.outputFileName)
         self.devmsg_label = QtWidgets.QLabel(Dialog)
         self.devmsg_label.setGeometry(QtCore.QRect(70, 170, 301, 20))
         font = QtGui.QFont()
@@ -52,6 +56,7 @@ class Ui_Dialog(object):
         self.browse_pushButton = QtWidgets.QPushButton(Dialog)
         self.browse_pushButton.setGeometry(QtCore.QRect(400, 130, 21, 21))
         self.browse_pushButton.setObjectName("browse_pushButton")
+        self.browse_pushButton.clicked.connect(self.FeatureUnderDevelopmentMessage)
         self.title_label = QtWidgets.QLabel(Dialog)
         self.title_label.setGeometry(QtCore.QRect(170, 10, 131, 31))
         font = QtGui.QFont()
@@ -68,7 +73,7 @@ class Ui_Dialog(object):
         self.threadcount_label.setGeometry(QtCore.QRect(50, 70, 241, 17))
         self.threadcount_label.setObjectName("threadcount_label")
         self.noofthreads_lineEdit = QtWidgets.QLineEdit(Dialog)
-        self.noofthreads_lineEdit.setGeometry(QtCore.QRect(300, 70, 21, 20))
+        self.noofthreads_lineEdit.setGeometry(QtCore.QRect(300, 70, 20, 20))
         self.noofthreads_lineEdit.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.noofthreads_lineEdit.setText(str(globals.noOfThreads))
         self.noofthreads_lineEdit.setObjectName("noofthreads_lineEdit")
@@ -97,6 +102,7 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Settings"))
         self.outputfile_label.setText(_translate("Dialog", "Output CSV File Name :"))
+        self.outputfileext_label.setText(_translate("Dialog", ".csv"))
         self.markingschemefile_label.setText(_translate("Dialog", "Making Scheme CSV File :"))
         self.apply_pushButton.setText(_translate("Dialog", "Apply"))
         self.threadnoun_label.setText(_translate("Dialog", "Threads"))
@@ -115,6 +121,14 @@ class Ui_Dialog(object):
         noOfThreadCountExceededMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         noOfThreadCountExceededMessageBox.exec_()
 
+    def FeatureUnderDevelopmentMessage(self):
+        featureUnderDevelopmentMessageBox = QtWidgets.QMessageBox()
+        featureUnderDevelopmentMessageBox.setIcon(QtWidgets.QMessageBox.Information)
+        featureUnderDevelopmentMessageBox.setText("This feature is currently under development.")
+        featureUnderDevelopmentMessageBox.setWindowTitle("Information")
+        featureUnderDevelopmentMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        featureUnderDevelopmentMessageBox.exec_()
+
     def ApplySettings(self):
         noOfThreads = int(self.noofthreads_lineEdit.text())
         if noOfThreads > cpu_count():
@@ -122,6 +136,7 @@ class Ui_Dialog(object):
         else:
             globals.noOfThreads = noOfThreads
             globals.markingSchemeFilePath = self.markingschemefile_lineEdit.text()
+            globals.outputFileName = self.outputfilename_lineEdit.text()
 
 def Start():
     dialog = QtWidgets.QDialog()
