@@ -15,7 +15,7 @@ class Ui_Dialog(object):
         self.logo_label.setScaledContents(True)
         self.logo_label.setObjectName("logo_label")
         self.credits_textBrowser = QtWidgets.QTextBrowser(Dialog)
-        self.credits_textBrowser.setGeometry(QtCore.QRect(10, 10, 381, 261))
+        self.credits_textBrowser.setGeometry(QtCore.QRect(10, 10, 381, 265))
         self.credits_textBrowser.setStyleSheet("")
         self.credits_textBrowser.setOpenExternalLinks(True)
         self.credits_textBrowser.setOpenLinks(True)

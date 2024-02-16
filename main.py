@@ -30,6 +30,7 @@ if __name__ == "__main__":
         
         # PDF Parsing
         if fileExt == '.pdf': PDFDataExtract()
+        else: continue
         
         # Add Up Scores Of The Same Person
         ScoreAggregator()
