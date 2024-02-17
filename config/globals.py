@@ -33,3 +33,10 @@ pdfDPI = 200
 
 # UI Parameters
 markingSchemeFilePath = 'KTU Marking Scheme (default)'
+
+# Marking Scheme Variables
+week1Score = 0
+week2Score = 0
+week3Score = 0
+week6Score = 0
+week12Score = 0

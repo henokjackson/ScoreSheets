@@ -171,18 +171,28 @@ class Ui_MainWindow(object):
         self.courses_list_lineEdit.setText(courseListFilePath[0])
 
     def OnProcessButtonClick(self):
-        # Getting Parameters
-        sourceFolderPath = self.source_folder_path_lineEdit.text
-        courseProviderNameListCsvFilePath = self.courses_list_lineEdit.text
-        personNameListCsvFilePath = self.name_list_lineEdit.text
-        isMarksCustomized = False
-        outputFolderParentPath = self.destination_folder_lineEdit.text
+        # Parameter Check
+        if ( self.source_folder_path_lineEdit.text() == "" or self.courses_list_lineEdit.text() == "" or self.name_list_lineEdit.text() == ""):
+            parametersNotSuppliedWarningMessageBox = QtWidgets.QMessageBox()
+            parametersNotSuppliedWarningMessageBox.setIcon(QtWidgets.QMessageBox.Critical)
+            parametersNotSuppliedWarningMessageBox.setText("All file paths were not configured. Please configure all folder paths.")
+            parametersNotSuppliedWarningMessageBox.setWindowTitle("Error")
+            parametersNotSuppliedWarningMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            parametersNotSuppliedWarningMessageBox.exec_()
 
-        # InitProcesses Thread
-        InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-        InitProcesses_Thread.start()
+        else:
+            # Getting Parameters
+            sourceFolderPath = self.source_folder_path_lineEdit.text()
+            courseProviderNameListCsvFilePath = self.courses_list_lineEdit.text()
+            personNameListCsvFilePath = self.name_list_lineEdit.text()
+            isMarksCustomized = False
+            outputFolderParentPath = self.destination_folder_lineEdit.text()
 
-        ProcessingDialog.Start()
+            # InitProcesses Thread
+            InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+            InitProcesses_Thread.start()
+
+            ProcessingDialog.Start()
 
 def Start():
     app = QtWidgets.QApplication(sys.argv)
