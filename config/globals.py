@@ -1,16 +1,17 @@
 # Import File For Global Variables
 from multiprocessing import cpu_count
+
 # Data Holders
 currentPdfDataDictionary = {}
 currentPdfDataList = []
 
 # File Pathss
-sourceFolderPath = None
+sourceFolderPath = './test_data'
 outputFolderParentPath = '.'
 outputFolderName = 'data'
 outputFileName = 'ScoreSheet'
-courseProviderNameListCsvFilePath = None
-personNameListCsvFilePath = None
+courseProviderNameListCsvFilePath = './config/CourseList.csv'
+personNameListCsvFilePath = './config/NameList.csv'
 pdfFileName = None
 
 # Constants
@@ -40,3 +41,8 @@ week2Score = 0
 week3Score = 0
 week6Score = 0
 week12Score = 0
+
+# Shared UI Variables
+progressBarPercentage = 0
+currentFileName = ''
+currentFileNo = 0

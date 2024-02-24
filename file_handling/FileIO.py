@@ -2,7 +2,6 @@ import csv
 import PyPDF2
 import pdf2image
 from config import globals
-
 from text_processing.TextProcessing import TextExtract
 from image_processing.ImageProcessing import ImagePreProcess
 from score_calculation.ScoreCalculation import GetCourseDuration

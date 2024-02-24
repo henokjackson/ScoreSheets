@@ -51,7 +51,6 @@ def ScoreAggregator():
         IsPersonDataExisting = False
         # Aggregating Scores of Same Type of Courses Taken By The Same Person
         for index, currentPdfDataListDictionaryItem in enumerate(globals.currentPdfDataList, 0):
-            print(currentPdfDataListDictionaryItem)
             if(currentPdfDataListDictionaryItem["Name"] == globals.currentPdfDataDictionary["Name"] and currentPdfDataListDictionaryItem["Course Type"] == globals.currentPdfDataDictionary["Course Type"]):
                 globals.currentPdfDataDictionary["Current Score"] += currentPdfDataListDictionaryItem["Current Score"]
                 globals.currentPdfDataDictionary["Duration"] += currentPdfDataListDictionaryItem["Duration"]

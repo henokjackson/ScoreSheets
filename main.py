@@ -12,6 +12,3 @@ if __name__ == "__main__":
         # Customize Marking Scheme
         if globals.isMarksCustomized: CustomizeMarks()
     '''
-    
-    # Write Results to CSV File
-    CSVWriter()

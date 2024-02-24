@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from config import globals
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -7,12 +8,12 @@ class Ui_Dialog(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../assets/misc/info.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
-        self.file_name_label_3 = QtWidgets.QLabel(Dialog)
-        self.file_name_label_3.setGeometry(QtCore.QRect(120, 40, 311, 17))
-        self.file_name_label_3.setObjectName("file_name_label_3")
-        self.file_name_label_2 = QtWidgets.QLabel(Dialog)
-        self.file_name_label_2.setGeometry(QtCore.QRect(120, 20, 311, 20))
-        self.file_name_label_2.setObjectName("file_name_label_2")
+        self.fileno_label = QtWidgets.QLabel(Dialog)
+        self.fileno_label.setGeometry(QtCore.QRect(120, 40, 311, 17))
+        self.fileno_label.setObjectName("fileno_label")
+        self.filename_label = QtWidgets.QLabel(Dialog)
+        self.filename_label.setGeometry(QtCore.QRect(120, 20, 311, 20))
+        self.filename_label.setObjectName("filename_label")
         self.file_name_label = QtWidgets.QLabel(Dialog)
         self.file_name_label.setGeometry(QtCore.QRect(40, 20, 81, 17))
         self.file_name_label.setObjectName("file_name_label")
@@ -33,11 +34,21 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Processing"))
-        self.file_name_label_3.setText(_translate("Dialog", "1"))
-        self.file_name_label_2.setText(_translate("Dialog", "Sample.pdf"))
+        self.fileno_label.setText(_translate("Dialog", "1"))
+        self.filename_label.setText(_translate("Dialog", "Sample.pdf"))
         self.file_name_label.setText(_translate("Dialog", "File Name :"))
         self.abort_pushButton.setText(_translate("Dialog", "Abort"))
         self.file_no_label.setText(_translate("Dialog", "File No.  :"))
+
+    def RefreshProgressBar(self, timer, dialog):
+        self.process_progressBar.setValue(int(globals.progressBarPercentage))
+        self.filename_label.setText(globals.currentFileName)
+        self.fileno_label.setText(str(globals.currentFileNo))
+        print("Progress Bar Updated !")
+
+        if globals.progressBarPercentage == 100 :
+            timer.stop()
+            dialog.close()
 
 def Start():
     dialog = QtWidgets.QDialog()
@@ -45,4 +56,10 @@ def Start():
     ui.setupUi(dialog)
     dialog.setWindowModality(QtCore.Qt.ApplicationModal)
     dialog.show()
+
+    # Timer For Refreshing Progress Bar
+    timer = QtCore.QTimer()
+    timer.timeout.connect(lambda: ui.RefreshProgressBar(timer, dialog))
+    timer.start(1)
+    
     dialog.exec_()

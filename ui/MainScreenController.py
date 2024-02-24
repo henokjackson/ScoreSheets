@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from config import globals
 from ui.Elements import ProgressBar
-from file_handling.FileIO import PDFDataExtract
+from file_handling.FileIO import CSVWriter, PDFDataExtract
 from config.Configuration import Configuration, FlushBuffers
 from score_calculation.ScoreCalculation import ScoreAggregator
 
@@ -14,7 +14,7 @@ def InitProcesses(sourceFolderPath, courseProviderNameListCsvFilePath, personNam
         # Performing PDF Search and Parsing
     for index, globals.pdfFileName in enumerate(os.listdir(globals.sourceFolderPath),1):
         # Update Progress
-        ProgressBar(index, len(os.listdir(globals.sourceFolderPath)))
+        globals.progressBarPercentage, globals.currentFileName, globals.currentFileNo = ProgressBar(index, len(os.listdir(globals.sourceFolderPath)))
         
         fileExt = Path(globals.pdfFileName).suffix.lower()
         
@@ -27,3 +27,6 @@ def InitProcesses(sourceFolderPath, courseProviderNameListCsvFilePath, personNam
 
         # Flush Out Current-File Data Holders
         FlushBuffers()
+
+        # Write Results to CSV File
+    CSVWriter()
