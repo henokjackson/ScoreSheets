@@ -194,8 +194,8 @@ class Ui_MainWindow(object):
             outputFolderParentPath = self.destination_folder_lineEdit.text()
 
             # InitProcesses Thread
-            InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-            InitProcesses_Thread.start()
+            globals.InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+            globals.InitProcesses_Thread.start()
 
             # InitProgressBarUpdate Thread
             # InitProgressBarUpdate_Thread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')

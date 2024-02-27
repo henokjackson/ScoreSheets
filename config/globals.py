@@ -46,3 +46,6 @@ week12Score = 0
 progressBarPercentage = 0
 currentFileName = ''
 currentFileNo = 0
+
+# Threads
+InitProcesses_Thread = None

@@ -1,5 +1,8 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+import os
+import signal
+import threading
 from config import globals
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -20,6 +23,7 @@ class Ui_Dialog(object):
         self.abort_pushButton = QtWidgets.QPushButton(Dialog)
         self.abort_pushButton.setGeometry(QtCore.QRect(190, 100, 71, 25))
         self.abort_pushButton.setObjectName("abort_pushButton")
+        self.abort_pushButton.clicked.connect(self.Abort);
         self.file_no_label = QtWidgets.QLabel(Dialog)
         self.file_no_label.setGeometry(QtCore.QRect(40, 40, 71, 17))
         self.file_no_label.setObjectName("file_no_label")
@@ -49,6 +53,9 @@ class Ui_Dialog(object):
         if globals.progressBarPercentage == 100 :
             timer.stop()
             dialog.close()
+
+    def Abort(self):
+        os.kill(threading.get_native_id(), signal.SIGTERM)
 
 def Start():
     dialog = QtWidgets.QDialog()
