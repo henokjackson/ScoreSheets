@@ -1,5 +1,5 @@
 # Import File For Global Variables
-from multiprocessing import cpu_count
+from multiprocessing import cpu_count, Queue
 
 # Data Holders
 currentPdfDataDictionary = {}
@@ -48,4 +48,13 @@ currentFileName = ''
 currentFileNo = 0
 
 # Threads
-InitProcesses_Thread = None
+initProcessesThread = None
+initProcessesThreadNativeId = -1
+
+initProgressBarUpdateThread = None
+initProgressBarUpdateThreadNativeId = -1
+
+# Thread Safe Queues
+# currentFileNoQueue = Queue()
+# currentFileNameQueue = Queue()
+# progressBarPercentageQueue = Queue()

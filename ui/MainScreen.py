@@ -1,4 +1,5 @@
 import sys
+import multiprocessing
 from config import globals
 from threading import Thread
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -193,13 +194,22 @@ class Ui_MainWindow(object):
             isMarksCustomized = False
             outputFolderParentPath = self.destination_folder_lineEdit.text()
 
-            # InitProcesses Thread
-            globals.InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-            globals.InitProcesses_Thread.start()
+            # -nitProcesses Thread
+            globals.initProcessesThread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+            globals.initProcessesThread.start()
 
-            # InitProgressBarUpdate Thread
-            # InitProgressBarUpdate_Thread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
-            # InitProgressBarUpdate_Thread.start()
+            # initProgressBarUpdate Thread
+            # globals.initProgressBarUpdateThread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
+            # globals.initProgressBarUpdateThread.start()
+
+            # initProcesses Thread - multiprocessing implementation
+            # globals.initProcessesThread = multiprocessing.Process(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+            # globals.initProcessesThread.start()
+
+            # initProgressBarUpdate Thread - multiprocessing implementation
+            # globals.initProgressBarUpdateThread = multiprocessing.Process(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
+            # globals.initProgressBarUpdateThread.start()
+
             ProcessingDialog.Start()
 
 def Start():

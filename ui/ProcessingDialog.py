@@ -48,14 +48,16 @@ class Ui_Dialog(object):
         self.process_progressBar.setValue(int(globals.progressBarPercentage))
         self.filename_label.setText(globals.currentFileName)
         self.fileno_label.setText(str(globals.currentFileNo))
-        print("Progress Bar Updated !")
+        #print("Progress Bar Updated !")
 
         if globals.progressBarPercentage == 100 :
             timer.stop()
             dialog.close()
 
     def Abort(self):
-        os.kill(threading.get_native_id(), signal.SIGTERM)
+        print("Aborted !")
+        
+        os.kill(globals.initProcessesThreadNativeId, signal.SIGTERM)
 
 def Start():
     dialog = QtWidgets.QDialog()
