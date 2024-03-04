@@ -1,20 +1,21 @@
-# Import File For Global Variables
+# File For Global Variables
 from multiprocessing import cpu_count#, Queue
 
 # Data Holders
 currentPdfDataDictionary = {}
 currentPdfDataList = []
 
-# File Paths
+# File Paths / Names
 sourceFolderPath = './test_data'
 outputFolderParentPath = '.'
 outputFolderName = 'output'
 outputFileName = 'ScoreSheet'
 courseProviderNameListCsvFilePath = './config/info/CourseList.csv'
 personNameListCsvFilePath = './config/info/NameList.csv'
+markingSchemeFilePath = 'KTU Marking Scheme (default)'
 pdfFileName = None
 
-# Constants
+# Image Processing Constants
 imgContrastEnhanceFactor = 1.5
 imgSharpnessEnhanceFactor = 2
 
@@ -32,9 +33,6 @@ clearScreenCommand = ''
 noOfThreads = cpu_count()
 pdfDPI = 200
 
-# UI Parameters
-markingSchemeFilePath = 'KTU Marking Scheme (default)'
-
 # Marking Scheme Variables
 week1Score = 0
 week2Score = 0
@@ -42,19 +40,19 @@ week3Score = 0
 week6Score = 0
 week12Score = 0
 
-# Shared UI Variables
+# UI Variables
 progressBarPercentage = 0
 currentFileName = ''
 currentFileNo = 0
 
-# Threads
+# Thread Variables
 initProcessesThread = None
 initProcessesThreadNativeId = -1
 
-initProgressBarUpdateThread = None
-initProgressBarUpdateThreadNativeId = -1
+#initProgressBarUpdateThread = None
+#initProgressBarUpdateThreadNativeId = -1
 
 # Thread Safe Queues
-# currentFileNoQueue = Queue()
-# currentFileNameQueue = Queue()
-# progressBarPercentageQueue = Queue()
+#currentFileNoQueue = Queue()
+#currentFileNameQueue = Queue()
+#progressBarPercentageQueue = Queue()
