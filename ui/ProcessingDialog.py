@@ -1,7 +1,6 @@
 import os
 import signal
-import threading
-from config import globals
+from config import Globals
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Dialog(object):
@@ -45,19 +44,19 @@ class Ui_Dialog(object):
         self.file_no_label.setText(_translate("Dialog", "File No.  :"))
 
     def RefreshProgressBar(self, timer, dialog):
-        self.process_progressBar.setValue(int(globals.progressBarPercentage))
-        self.filename_label.setText(globals.currentFileName)
-        self.fileno_label.setText(str(globals.currentFileNo))
+        self.process_progressBar.setValue(int(Globals.progressBarPercentage))
+        self.filename_label.setText(Globals.currentFileName)
+        self.fileno_label.setText(str(Globals.currentFileNo))
         #print("Progress Bar Updated !")
 
-        if globals.progressBarPercentage == 100 :
+        if Globals.progressBarPercentage == 100 :
             timer.stop()
             dialog.close()
 
     def Abort(self):
         print("Aborted !")
         
-        os.kill(globals.initProcessesThreadNativeId, signal.SIGTERM)
+        os.kill(Globals.initProcessesThreadNativeId, signal.SIGTERM)
 
 def Start():
     dialog = QtWidgets.QDialog()

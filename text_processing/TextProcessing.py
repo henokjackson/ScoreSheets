@@ -2,7 +2,7 @@ import csv
 import spacy
 import string
 import pytesseract as OCR
-from config import globals
+from config import Globals
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
@@ -39,7 +39,7 @@ def TextProcess(text):
     refinedText, refinedTextWordsList = TextPreProcess(text)
 
     # Open Course Provider Listing File
-    courseProviderNameListCsvFile = open(globals.courseProviderNameListCsvFilePath)
+    courseProviderNameListCsvFile = open(Globals.courseProviderNameListCsvFilePath)
     courseProviderNameListCsvFileColumnsList = csv.reader(courseProviderNameListCsvFile)
 
     # Iterating Through Course Providers' List To Find The Match and Set Course Type
@@ -62,7 +62,7 @@ def TextProcess(text):
             personsNameList.append(name.text)
 
     # Opening Persons' Name Listing File
-    personNameListCsvFile = open(globals.personNameListCsvFilePath)
+    personNameListCsvFile = open(Globals.personNameListCsvFilePath)
     personNameListCsvFileColumnsList = csv.reader(personNameListCsvFile)
 
     # Iterating Through Person Name List To Find The Match and Set Course Type
@@ -73,10 +73,10 @@ def TextProcess(text):
     
     # Generate Hyperlink To Unidentified Certificates
     if(personName == "UNIDENTIFIED"):
-        globals.currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+globals.sourceFolderPath+"/"+globals.pdfFileName+"\""+",\""+personName+"\""+")"
+        Globals.currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+Globals.sourceFolderPath+"/"+Globals.pdfFileName+"\""+",\""+personName+"\""+")"
     else:
-        globals.currentPdfDataDictionary["Name"] = personName
-    globals.currentPdfDataDictionary["Course Type"] = courseType
+        Globals.currentPdfDataDictionary["Name"] = personName
+    Globals.currentPdfDataDictionary["Course Type"] = courseType
 
 def TextExtract(currentPageImage):
     # Read Text From Image

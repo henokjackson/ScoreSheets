@@ -1,6 +1,6 @@
 import sys
-import multiprocessing
-from config import globals
+#import multiprocessing
+from config import Globals
 from threading import Thread
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.MainScreenController import InitProcesses
@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.source_folder_path_lineEdit = QtWidgets.QLineEdit(self.source_folder_groupBox)
         self.source_folder_path_lineEdit.setGeometry(QtCore.QRect(0, 20, 281, 21))
         self.source_folder_path_lineEdit.setObjectName("source_folder_path_lineEdit")
-        self.source_folder_path_lineEdit.setText(globals.sourceFolderPath)
+        self.source_folder_path_lineEdit.setText(Globals.sourceFolderPath)
         self.source_folder_path_pushButton = QtWidgets.QPushButton(self.source_folder_groupBox)
         self.source_folder_path_pushButton.setGeometry(QtCore.QRect(280, 20, 61, 21))
         font = QtGui.QFont()
@@ -60,7 +60,7 @@ class Ui_MainWindow(object):
         self.destination_folder_lineEdit = QtWidgets.QLineEdit(self.destination_folder_groupBox)
         self.destination_folder_lineEdit.setGeometry(QtCore.QRect(0, 20, 281, 21))
         self.destination_folder_lineEdit.setObjectName("destination_folder_lineEdit")
-        self.destination_folder_lineEdit.setText(globals.outputFolderParentPath)
+        self.destination_folder_lineEdit.setText(Globals.outputFolderParentPath)
         self.destination_folder_pushButton = QtWidgets.QPushButton(self.destination_folder_groupBox)
         self.destination_folder_pushButton.setGeometry(QtCore.QRect(280, 20, 61, 21))
         font = QtGui.QFont()
@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
         self.name_list_lineEdit = QtWidgets.QLineEdit(self.name_list_groupBox)
         self.name_list_lineEdit.setGeometry(QtCore.QRect(0, 20, 281, 21))
         self.name_list_lineEdit.setObjectName("name_list_lineEdit")
-        self.name_list_lineEdit.setText(globals.personNameListCsvFilePath)
+        self.name_list_lineEdit.setText(Globals.personNameListCsvFilePath)
         self.name_list_pushButton = QtWidgets.QPushButton(self.name_list_groupBox)
         self.name_list_pushButton.setGeometry(QtCore.QRect(280, 20, 61, 21))
         font = QtGui.QFont()
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.courses_list_lineEdit = QtWidgets.QLineEdit(self.courses_list_groupBox)
         self.courses_list_lineEdit.setGeometry(QtCore.QRect(0, 20, 281, 21))
         self.courses_list_lineEdit.setObjectName("courses_list_lineEdit")
-        self.courses_list_lineEdit.setText(globals.courseProviderNameListCsvFilePath)
+        self.courses_list_lineEdit.setText(Globals.courseProviderNameListCsvFilePath)
         self.courses_list_pushButton = QtWidgets.QPushButton(self.courses_list_groupBox)
         self.courses_list_pushButton.setGeometry(QtCore.QRect(280, 20, 61, 21))
         font = QtGui.QFont()
@@ -195,8 +195,8 @@ class Ui_MainWindow(object):
             outputFolderParentPath = self.destination_folder_lineEdit.text()
 
             # -nitProcesses Thread
-            globals.initProcessesThread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-            globals.initProcessesThread.start()
+            Globals.initProcessesThread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+            Globals.initProcessesThread.start()
 
             # initProgressBarUpdate Thread
             # globals.initProgressBarUpdateThread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')

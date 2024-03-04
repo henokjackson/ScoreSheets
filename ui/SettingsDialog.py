@@ -1,4 +1,4 @@
-from config import globals
+from config import Globals
 from multiprocessing import cpu_count
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -43,7 +43,7 @@ class Ui_Dialog(object):
         self.outputfilename_lineEdit.setGeometry(QtCore.QRect(230, 100, 161, 20))
         self.outputfilename_lineEdit.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.outputfilename_lineEdit.setObjectName("outputfilename_lineEdit")
-        self.outputfilename_lineEdit.setText(globals.outputFileName)
+        self.outputfilename_lineEdit.setText(Globals.outputFileName)
         self.devmsg_label = QtWidgets.QLabel(Dialog)
         self.devmsg_label.setGeometry(QtCore.QRect(70, 170, 301, 20))
         font = QtGui.QFont()
@@ -75,7 +75,7 @@ class Ui_Dialog(object):
         self.noofthreads_lineEdit = QtWidgets.QLineEdit(Dialog)
         self.noofthreads_lineEdit.setGeometry(QtCore.QRect(300, 70, 20, 20))
         self.noofthreads_lineEdit.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.noofthreads_lineEdit.setText(str(globals.noOfThreads))
+        self.noofthreads_lineEdit.setText(str(Globals.noOfThreads))
         self.noofthreads_lineEdit.setObjectName("noofthreads_lineEdit")
         self.devmsgimg_label = QtWidgets.QLabel(Dialog)
         self.devmsgimg_label.setGeometry(QtCore.QRect(110, 220, 241, 61))
@@ -134,9 +134,9 @@ class Ui_Dialog(object):
         if noOfThreads > cpu_count():
             self.ThreadCountExceededErrorMessage()
         else:
-            globals.noOfThreads = noOfThreads
-            globals.markingSchemeFilePath = self.markingschemefile_lineEdit.text()
-            globals.outputFileName = self.outputfilename_lineEdit.text()
+            Globals.noOfThreads = noOfThreads
+            Globals.markingSchemeFilePath = self.markingschemefile_lineEdit.text()
+            Globals.outputFileName = self.outputfilename_lineEdit.text()
 
 def Start():
     dialog = QtWidgets.QDialog()

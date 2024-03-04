@@ -1,24 +1,24 @@
 import os
 from shutil import rmtree
-from config import globals
+from config import Globals
 
 def SystemSetup():
-    if os.name == "posix": globals.clearScreenCommand = 'clear'
-    elif os.name == "nt" : globals.clearScreenCommand = 'cls'
+    if os.name == "posix": Globals.clearScreenCommand = 'clear'
+    elif os.name == "nt" : Globals.clearScreenCommand = 'cls'
 
 def WorkspaceSetup():
-    os.makedirs(globals.outputFolderParentPath+'/'+globals.outputFolderName)
+    os.makedirs(Globals.outputFolderParentPath+'/'+Globals.outputFolderName)
 
 def Configuration(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath):
     # Input Parameters
-    globals.sourceFolderPath = sourceFolderPath
-    globals.courseProviderNameListCsvFilePath = courseProviderNameListCsvFilePath
-    globals.personNameListCsvFilePath = personNameListCsvFilePath
-    globals.isMarksCustomized = isMarksCustomized
-    globals.outputFolderParentPath = outputFolderParentPath
+    Globals.sourceFolderPath = sourceFolderPath
+    Globals.courseProviderNameListCsvFilePath = courseProviderNameListCsvFilePath
+    Globals.personNameListCsvFilePath = personNameListCsvFilePath
+    Globals.isMarksCustomized = isMarksCustomized
+    Globals.outputFolderParentPath = outputFolderParentPath
 
 def FlushBuffers():
-    globals.currentPdfDataDictionary = {}
+    Globals.currentPdfDataDictionary = {}
 
 def ClearCache():
     rmtree("config/__pycache__")
