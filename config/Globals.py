@@ -1,17 +1,17 @@
 # Import File For Global Variables
-#from multiprocessing import cpu_count, Queue
+from multiprocessing import cpu_count#, Queue
 
 # Data Holders
 currentPdfDataDictionary = {}
 currentPdfDataList = []
 
-# File Pathss
+# File Paths
 sourceFolderPath = './test_data'
 outputFolderParentPath = '.'
-outputFolderName = 'data'
+outputFolderName = 'output'
 outputFileName = 'ScoreSheet'
-courseProviderNameListCsvFilePath = './config/CourseList.csv'
-personNameListCsvFilePath = './config/NameList.csv'
+courseProviderNameListCsvFilePath = './config/info/CourseList.csv'
+personNameListCsvFilePath = './config/info/NameList.csv'
 pdfFileName = None
 
 # Constants
