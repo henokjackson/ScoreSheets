@@ -7,9 +7,9 @@ from file_handling.FileIO import CSVWriter, PDFDataExtract
 from config.Configuration import Configuration, FlushBuffers
 from score_calculation.ScoreCalculation import ScoreAggregator
 
-def InitProcesses(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath):
+def ExecuteProcesses(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath):
     # Set Native ID of Current Process
-    Globals.initProcessesThreadNativeId = threading.get_native_id()
+    Globals.mainProcessesThreadNativeId = threading.get_native_id()
 
     # Setting Up Configuration
     Configuration(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath)

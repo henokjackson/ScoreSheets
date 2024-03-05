@@ -14,4 +14,4 @@ def RefreshProgressBar(ui, timer, dialog):
         
 def Abort():
     print("Aborted !")
-    os.kill(Globals.initProcessesThreadNativeId, signal.SIGTERM)
+    os.kill(Globals.mainProcessesThreadNativeId, signal.SIGTERM)

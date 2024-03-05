@@ -2,7 +2,7 @@ import sys
 from config import Globals
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.views import SettingsDialog, CreditsDialog
-from ui.controllers.MainScreenController import SelectCourseListFile, SelectDestinationFolder, SelectNameListFile, SelectSourceFolder, OnProcessButtonClick
+from ui.controllers import MainScreenController
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.source_folder_path_pushButton.setFont(font)
         self.source_folder_path_pushButton.setObjectName("source_folder_path_pushButton")
-        self.source_folder_path_pushButton.clicked.connect(lambda: SelectSourceFolder(self))
+        self.source_folder_path_pushButton.clicked.connect(lambda: MainScreenController.SelectSourceFolder(self))
         self.destination_folder_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.destination_folder_groupBox.setGeometry(QtCore.QRect(40, 180, 341, 41))
         font = QtGui.QFont()
@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.destination_folder_pushButton.setFont(font)
         self.destination_folder_pushButton.setObjectName("destination_folder_pushButton")
-        self.destination_folder_pushButton.clicked.connect(lambda: SelectDestinationFolder(self))
+        self.destination_folder_pushButton.clicked.connect(lambda: MainScreenController.SelectDestinationFolder(self))
         self.name_list_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.name_list_groupBox.setGeometry(QtCore.QRect(40, 230, 341, 41))
         font = QtGui.QFont()
@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.name_list_pushButton.setFont(font)
         self.name_list_pushButton.setObjectName("name_list_pushButton")
-        self.name_list_pushButton.clicked.connect(lambda: SelectNameListFile(self))
+        self.name_list_pushButton.clicked.connect(lambda: MainScreenController.SelectNameListFile(self))
         self.courses_list_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.courses_list_groupBox.setGeometry(QtCore.QRect(40, 280, 341, 41))
         font = QtGui.QFont()
@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.courses_list_pushButton.setFont(font)
         self.courses_list_pushButton.setObjectName("courses_list_pushButton")
-        self.courses_list_pushButton.clicked.connect(lambda: SelectCourseListFile(self))
+        self.courses_list_pushButton.clicked.connect(lambda: MainScreenController.SelectCourseListFile(self))
         self.process_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.process_pushButton.setGeometry(QtCore.QRect(160, 340, 91, 31))
         font = QtGui.QFont()
@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.process_pushButton.setFont(font)
         self.process_pushButton.setObjectName("process_pushButton")
-        self.process_pushButton.clicked.connect(lambda:OnProcessButtonClick(self))
+        self.process_pushButton.clicked.connect(lambda: MainScreenController.ExecuteMainProcessesThread(self))
         self.settings_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.settings_pushButton.setGeometry(QtCore.QRect(380, 360, 31, 31))
         self.settings_pushButton.setText("")
@@ -127,7 +127,7 @@ class Ui_MainWindow(object):
         self.settings_pushButton.setIcon(icon1)
         self.settings_pushButton.setIconSize(QtCore.QSize(32, 32))
         self.settings_pushButton.setObjectName("settings_pushButton")
-        self.settings_pushButton.clicked.connect(SettingsDialog.Start)
+        self.settings_pushButton.clicked.connect(SettingsDialog.Render)
         self.credits_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.credits_pushButton.setGeometry(QtCore.QRect(10, 360, 31, 31))
         self.credits_pushButton.setText("")
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
         self.credits_pushButton.setIcon(icon2)
         self.credits_pushButton.setIconSize(QtCore.QSize(28, 28))
         self.credits_pushButton.setObjectName("credits_pushButton")
-        self.credits_pushButton.clicked.connect(CreditsDialog.Start)
+        self.credits_pushButton.clicked.connect(CreditsDialog.Render)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -158,7 +158,7 @@ class Ui_MainWindow(object):
         self.settings_pushButton.setToolTip(_translate("MainWindow", "Settings"))
         self.credits_pushButton.setToolTip(_translate("MainWindow", "Credits"))
 
-def Start():
+def Render():
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

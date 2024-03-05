@@ -1,7 +1,7 @@
 from config import Globals
 from multiprocessing import cpu_count
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from ui.controllers import SettingsDialogController
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -23,7 +23,7 @@ class Ui_Dialog(object):
         self.apply_pushButton = QtWidgets.QPushButton(Dialog)
         self.apply_pushButton.setGeometry(QtCore.QRect(186, 300, 89, 25))
         self.apply_pushButton.setObjectName("apply_pushButton")
-        self.apply_pushButton.clicked.connect(self.ApplySettings)
+        self.apply_pushButton.clicked.connect(lambda: SettingsDialogController.ApplySettings(self))
         self.threadnoun_label = QtWidgets.QLabel(Dialog)
         self.threadnoun_label.setGeometry(QtCore.QRect(330, 70, 51, 17))
         font = QtGui.QFont()
@@ -129,16 +129,7 @@ class Ui_Dialog(object):
         featureUnderDevelopmentMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         featureUnderDevelopmentMessageBox.exec_()
 
-    def ApplySettings(self):
-        noOfThreads = int(self.noofthreads_lineEdit.text())
-        if noOfThreads > cpu_count():
-            self.ThreadCountExceededErrorMessage()
-        else:
-            Globals.noOfThreads = noOfThreads
-            Globals.markingSchemeFilePath = self.markingschemefile_lineEdit.text()
-            Globals.outputFileName = self.outputfilename_lineEdit.text()
-
-def Start():
+def Render():
     dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(dialog)

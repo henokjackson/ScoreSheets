@@ -42,13 +42,30 @@ week6Score = 0
 week12Score = 0
 
 # UI Variables
+loadingOptions = ["Loading assets...",
+                  "Loading coniguration...",
+                  "Clearing up cache...",
+                  "Setting up workspace...",
+                  "Loading marking schemes..."
+                  ]
 progressBarPercentage = 0
 currentFileName = ''
 currentFileNo = 0
 
 # Thread Variables
-initProcessesThread = None
-initProcessesThreadNativeId = -1
+mainProcessesThread = None
+mainProcessesThreadNativeId = -1
+
+# Cache
+pycacheFoldersList = ["config/__pycache__",
+                      "file_handling/__pycache__",
+                      "image_processing/__pycache__",
+                      "score_calculation/__pycache__",
+                      "text_processing/__pycache__",
+                      "process_handler/__pycache__",
+                      "ui/controllers/__pycache__",
+                      "ui/views/__pycache__"
+                      ]
 
 #initProgressBarUpdateThread = None
 #initProgressBarUpdateThreadNativeId = -1

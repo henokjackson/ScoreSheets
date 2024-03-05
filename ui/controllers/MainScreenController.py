@@ -3,7 +3,7 @@ from config import Globals
 from PyQt5 import QtWidgets
 from threading import Thread
 from ui.views import ProcessingDialog
-from process_handler.MainProcesses import InitProcesses
+from process_handler import MainProcesses
 
 def SelectSourceFolder(ui):
     sourceFolderPath = QtWidgets.QFileDialog.getExistingDirectory()
@@ -21,7 +21,7 @@ def SelectCourseListFile(ui):
     courseListFilePath = QtWidgets.QFileDialog.getOpenFileName()
     ui.courses_list_lineEdit.setText(courseListFilePath[0])
 
-def OnProcessButtonClick(ui):
+def ExecuteMainProcessesThread(ui):
     # Parameter Check
     if ( ui.source_folder_path_lineEdit.text() == "" or ui.courses_list_lineEdit.text() == "" or ui.name_list_lineEdit.text() == ""):
         parametersNotSuppliedWarningMessageBox = QtWidgets.QMessageBox()
@@ -39,9 +39,9 @@ def OnProcessButtonClick(ui):
         isMarksCustomized = False
         outputFolderParentPath = ui.destination_folder_lineEdit.text()
 
-        # initProcesses Thread
-        Globals.initProcessesThread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-        Globals.initProcessesThread.start()
+        # MainProcesses Thread
+        Globals.mainProcessesThread = Thread(target = MainProcesses.ExecuteProcesses, name = 'Main Processes Thread', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
+        Globals.mainProcessesThread.start()
 
         # initProgressBarUpdate Thread
         # globals.initProgressBarUpdateThread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
@@ -55,4 +55,6 @@ def OnProcessButtonClick(ui):
         # globals.initProgressBarUpdateThread = multiprocessing.Process(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
         # globals.initProgressBarUpdateThread.start()
 
-        ProcessingDialog.Start()
+        ProcessingDialog.Render()
+
+        #Globals.mainProcessesThread.join()

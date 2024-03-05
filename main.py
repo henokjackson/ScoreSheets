@@ -2,10 +2,10 @@ from ui.views import LoadingScreen, MainScreen
 
 if __name__ == "__main__":
     # Load Splash Screen
-    LoadingScreen.Start()
+    LoadingScreen.Render()
 
     # Render Main Screen
-    MainScreen.Start()
+    MainScreen.Render()
 
     ''' UNDER DEVELOPMENT !!
         # Customize Marking Scheme

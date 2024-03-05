@@ -1,7 +1,7 @@
 from score_calculation.ScoreCalculation import LoadKTUScheme
 from config.Configuration import SystemSetup, WorkspaceSetup, ClearCache
 
-def InitProcesses():
+def ExecuteProcesses():
     # Setup OS Parameters
     SystemSetup()
 

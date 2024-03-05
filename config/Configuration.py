@@ -7,7 +7,13 @@ def SystemSetup():
     elif os.name == "nt" : Globals.clearScreenCommand = 'cls'
 
 def WorkspaceSetup():
-    os.makedirs(Globals.outputFolderParentPath+'/'+Globals.outputFolderName)
+    try:
+        os.makedirs(Globals.outputFolderParentPath+'/'+Globals.outputFolderName)
+    except FileExistsError:
+        print("Folder Already Exists !, Removing Current Folder and Its Contents...")
+        rmtree(Globals.outputFolderParentPath+'/'+Globals.outputFolderName)
+        WorkspaceSetup()
+
 
 def Configuration(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath):
     # Input Parameters
@@ -21,11 +27,5 @@ def FlushBuffers():
     Globals.currentPdfDataDictionary = {}
 
 def ClearCache():
-    rmtree("config/__pycache__")
-    rmtree("file_handling/__pycache__")
-    rmtree("image_processing/__pycache__")
-    rmtree("score_calculation/__pycache__")
-    rmtree("text_processing/__pycache__")
-    rmtree("process_handler/__pycache__")
-    rmtree("ui/controllers/__pycache__")
-    rmtree("ui/views/__pycache__")
+    for folder in Globals.pycacheFoldersList:
+        rmtree(folder)

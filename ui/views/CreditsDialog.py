@@ -52,7 +52,7 @@ class Ui_Dialog(object):
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;\"><br /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Github : <a href=\"https://github.com/henokjackson/ScoreSheets\"><span style=\" text-decoration: underline; color:#0000ff;\">ScoreSheets</span></a></p></body></html>"))
 
-def Start():
+def Render():
     dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(dialog)

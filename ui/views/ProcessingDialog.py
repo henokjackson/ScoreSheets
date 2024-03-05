@@ -1,6 +1,5 @@
-from config import Globals
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui.controllers.ProcessingDialogController import RefreshProgressBar, Abort
+from ui.controllers import ProcessingDialogController
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -9,6 +8,7 @@ class Ui_Dialog(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../assets/misc/info.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
+        Dialog.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.WindowTitleHint | QtCore.Qt.CustomizeWindowHint)
         self.fileno_label = QtWidgets.QLabel(Dialog)
         self.fileno_label.setGeometry(QtCore.QRect(120, 40, 311, 17))
         self.fileno_label.setObjectName("fileno_label")
@@ -21,7 +21,7 @@ class Ui_Dialog(object):
         self.abort_pushButton = QtWidgets.QPushButton(Dialog)
         self.abort_pushButton.setGeometry(QtCore.QRect(190, 100, 71, 25))
         self.abort_pushButton.setObjectName("abort_pushButton")
-        self.abort_pushButton.clicked.connect(Abort);
+        self.abort_pushButton.clicked.connect(lambda: ProcessingDialogController.Abort());
         self.file_no_label = QtWidgets.QLabel(Dialog)
         self.file_no_label.setGeometry(QtCore.QRect(40, 40, 71, 17))
         self.file_no_label.setObjectName("file_no_label")
@@ -42,7 +42,7 @@ class Ui_Dialog(object):
         self.abort_pushButton.setText(_translate("Dialog", "Abort"))
         self.file_no_label.setText(_translate("Dialog", "File No.  :"))
 
-def Start():
+def Render():
     dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(dialog)
@@ -51,7 +51,7 @@ def Start():
 
     # Timer For Refreshing Progress Bar
     timer = QtCore.QTimer()
-    timer.timeout.connect(lambda: RefreshProgressBar(ui, timer, dialog))
+    timer.timeout.connect(lambda: ProcessingDialogController.RefreshProgressBar(ui, timer, dialog))
     timer.start(1)
     
     dialog.exec_()

@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui.controllers.LoadingScreenController import Loading, StartProcesses
+from ui.controllers import LoadingScreenController
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -38,7 +38,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         self.version_label.setText(_translate("Form", "Version 1.0"))
 
-def Start():
+def Render():
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
@@ -47,7 +47,7 @@ def Start():
 
     # Load Message Updater
     timer = QtCore.QTimer()
-    timer.timeout.connect(lambda: Loading(Form, ui, timer))
+    timer.timeout.connect(lambda: LoadingScreenController.Loading(Form, ui, timer))
     timer.start(300)
 
-    StartProcesses(app)
+    LoadingScreenController.ExecuteInitializationProcessesThread(app)
