@@ -3,7 +3,7 @@ from config import Globals
 from PyQt5 import QtWidgets
 from threading import Thread
 from ui.views import ProcessingDialog
-from process_handler import MainProcesses
+from process_handling import MainProcesses
 
 def SelectSourceFolder(ui):
     sourceFolderPath = QtWidgets.QFileDialog.getExistingDirectory()

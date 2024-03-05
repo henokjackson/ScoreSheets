@@ -62,7 +62,7 @@ pycacheFoldersList = ["config/__pycache__",
                       "image_processing/__pycache__",
                       "score_calculation/__pycache__",
                       "text_processing/__pycache__",
-                      "process_handler/__pycache__",
+                      "process_handling/__pycache__",
                       "ui/controllers/__pycache__",
                       "ui/views/__pycache__"
                       ]

@@ -1,6 +1,6 @@
 from config import Globals
 from threading import Thread
-from process_handler import InitializationProcesses
+from process_handling import InitializationProcesses
 
 def Loading(Form, ui, timer):    
     if Globals.loadingScreenInfoListIndex < len(Globals.loadingOptions):
