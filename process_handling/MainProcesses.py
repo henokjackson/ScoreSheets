@@ -14,13 +14,10 @@ def ExecuteProcesses(sourceFolderPath, courseProviderNameListCsvFilePath, person
     # Setting Up Configuration
     Configuration(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath)
 
-        # Performing PDF Search and Parsing
+    # Performing PDF Search and Parsing
     for index, Globals.pdfFileName in enumerate(os.listdir(Globals.sourceFolderPath),1):
         # Update Progress
         Globals.progressBarPercentage, Globals.currentFileName, Globals.currentFileNo = ProgressBar(index, len(os.listdir(Globals.sourceFolderPath)))
-        # globals.progressBarPercentageQueue.put(globals.progressBarPercentage)
-        # globals.currentFileNameQueue.put(globals.currentFileName)
-        # globals.currentFileNoQueue.put(globals.currentFileNoQueue)
         
         fileExt = Path(Globals.pdfFileName).suffix.lower()
         
@@ -33,6 +30,6 @@ def ExecuteProcesses(sourceFolderPath, courseProviderNameListCsvFilePath, person
 
         # Flush Out Current-File Data Holders
         FlushBuffers()
-
-        # Write Results to CSV File
+        
+    # Write Results to CSV File
     CSVWriter()

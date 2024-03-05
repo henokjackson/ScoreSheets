@@ -1,5 +1,4 @@
-# File For Global Variables
-from multiprocessing import cpu_count#, Queue
+from multiprocessing import cpu_count
 
 # Data Holders
 currentPdfDataDictionary = {}
@@ -56,7 +55,7 @@ currentFileNo = 0
 mainProcessesThread = None
 mainProcessesThreadNativeId = -1
 
-# Cache
+# Cache Resources Variables
 pycacheFoldersList = ["config/__pycache__",
                       "file_handling/__pycache__",
                       "image_processing/__pycache__",
@@ -66,11 +65,3 @@ pycacheFoldersList = ["config/__pycache__",
                       "ui/controllers/__pycache__",
                       "ui/views/__pycache__"
                       ]
-
-#initProgressBarUpdateThread = None
-#initProgressBarUpdateThreadNativeId = -1
-
-# Thread Safe Queues
-#currentFileNoQueue = Queue()
-#currentFileNameQueue = Queue()
-#progressBarPercentageQueue = Queue()

@@ -8,17 +8,17 @@ from nltk.tokenize import word_tokenize
 
 def TextPreProcess(text):
     # Junk Removal
-    characterReplaceMap = str.maketrans(string.punctuation, ' '*len(string.punctuation))   
+    characterReplaceMap = str.maketrans(string.punctuation, ' ' * len(string.punctuation))   
     junkRemovedText = text.translate(characterReplaceMap)
 
     # Generate Stopwords List
-    stopwordsList=set(stopwords.words("english"))
+    stopwordsList = set(stopwords.words("english"))
 
     # Tokenization
     tokenList = word_tokenize(junkRemovedText)
 
     # Stopwords Removal
-    stopwordsRemovedTokenList=[]
+    stopwordsRemovedTokenList = []
     for token in tokenList:
         if token not in stopwordsList:
             stopwordsRemovedTokenList.append(token)
@@ -29,11 +29,11 @@ def TextPreProcess(text):
     # Generating Clean Words List
     refinedTextWordsList = stopwordsRemovedTokenList
 
-    return refinedText,refinedTextWordsList
+    return refinedText, refinedTextWordsList
 
 def TextProcess(text):
     # Setting Course Type Variable
-    courseType="NON MOOC"
+    courseType = "NON MOOC"
     
     # Perform Text Pre-Processing
     refinedText, refinedTextWordsList = TextPreProcess(text)
@@ -46,7 +46,7 @@ def TextProcess(text):
     for column in courseProviderNameListCsvFileColumnsList:
         for refinedTextWord in refinedTextWordsList:
             if (str(column[0]).lower()) == (str(refinedTextWord).lower()):
-                courseType=column[1]
+                courseType = column[1]
 
     # Entity Variables
     personName = "UNIDENTIFIED"
@@ -73,7 +73,7 @@ def TextProcess(text):
     
     # Generate Hyperlink To Unidentified Certificates
     if(personName == "UNIDENTIFIED"):
-        Globals.currentPdfDataDictionary["Name"] = "=HYPERLINK("+"\""+Globals.sourceFolderPath+"/"+Globals.pdfFileName+"\""+",\""+personName+"\""+")"
+        Globals.currentPdfDataDictionary["Name"] = "=HYPERLINK(" + "\"" + Globals.sourceFolderPath + "/" + Globals.pdfFileName + "\"" + ",\"" + personName+"\"" + ")"
     else:
         Globals.currentPdfDataDictionary["Name"] = personName
     Globals.currentPdfDataDictionary["Course Type"] = courseType

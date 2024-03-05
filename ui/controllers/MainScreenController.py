@@ -1,4 +1,3 @@
-#import multiprocessing
 from config import Globals
 from PyQt5 import QtWidgets
 from threading import Thread
@@ -43,18 +42,4 @@ def ExecuteMainProcessesThread(ui):
         Globals.mainProcessesThread = Thread(target = MainProcesses.ExecuteProcesses, name = 'Main Processes Thread', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
         Globals.mainProcessesThread.start()
 
-        # initProgressBarUpdate Thread
-        # globals.initProgressBarUpdateThread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
-        # globals.initProgressBarUpdateThread.start()
-
-        # initProcesses Thread - multiprocessing implementation
-        # globals.initProcessesThread = multiprocessing.Process(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-        # globals.initProcessesThread.start()
-
-        # initProgressBarUpdate Thread - multiprocessing implementation
-        # globals.initProgressBarUpdateThread = multiprocessing.Process(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
-        # globals.initProgressBarUpdateThread.start()
-
         ProcessingDialog.Render()
-
-        #Globals.mainProcessesThread.join()

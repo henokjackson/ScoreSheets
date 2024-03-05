@@ -16,7 +16,6 @@ def WorkspaceSetup():
 
 
 def Configuration(sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath):
-    # Input Parameters
     Globals.sourceFolderPath = sourceFolderPath
     Globals.courseProviderNameListCsvFilePath = courseProviderNameListCsvFilePath
     Globals.personNameListCsvFilePath = personNameListCsvFilePath

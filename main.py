@@ -6,8 +6,3 @@ if __name__ == "__main__":
 
     # Render Main Screen
     MainScreen.Render()
-
-    ''' UNDER DEVELOPMENT !!
-        # Customize Marking Scheme
-        if globals.isMarksCustomized: CustomizeMarks()
-    '''
