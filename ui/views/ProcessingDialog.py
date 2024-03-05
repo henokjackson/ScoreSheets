@@ -1,7 +1,6 @@
-import os
-import signal
 from config import Globals
 from PyQt5 import QtCore, QtGui, QtWidgets
+from ui.controllers.ProcessingDialogController import RefreshProgressBar, Abort
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -22,7 +21,7 @@ class Ui_Dialog(object):
         self.abort_pushButton = QtWidgets.QPushButton(Dialog)
         self.abort_pushButton.setGeometry(QtCore.QRect(190, 100, 71, 25))
         self.abort_pushButton.setObjectName("abort_pushButton")
-        self.abort_pushButton.clicked.connect(self.Abort);
+        self.abort_pushButton.clicked.connect(Abort);
         self.file_no_label = QtWidgets.QLabel(Dialog)
         self.file_no_label.setGeometry(QtCore.QRect(40, 40, 71, 17))
         self.file_no_label.setObjectName("file_no_label")
@@ -43,21 +42,6 @@ class Ui_Dialog(object):
         self.abort_pushButton.setText(_translate("Dialog", "Abort"))
         self.file_no_label.setText(_translate("Dialog", "File No.  :"))
 
-    def RefreshProgressBar(self, timer, dialog):
-        self.process_progressBar.setValue(int(Globals.progressBarPercentage))
-        self.filename_label.setText(Globals.currentFileName)
-        self.fileno_label.setText(str(Globals.currentFileNo))
-        #print("Progress Bar Updated !")
-
-        if Globals.progressBarPercentage == 100 :
-            timer.stop()
-            dialog.close()
-
-    def Abort(self):
-        print("Aborted !")
-        
-        os.kill(Globals.initProcessesThreadNativeId, signal.SIGTERM)
-
 def Start():
     dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
@@ -67,7 +51,7 @@ def Start():
 
     # Timer For Refreshing Progress Bar
     timer = QtCore.QTimer()
-    timer.timeout.connect(lambda: ui.RefreshProgressBar(timer, dialog))
+    timer.timeout.connect(lambda: RefreshProgressBar(ui, timer, dialog))
     timer.start(1)
     
     dialog.exec_()

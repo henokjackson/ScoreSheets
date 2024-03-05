@@ -7,7 +7,7 @@ def InitProcesses():
 
     # Clear App Cache
     ClearCache()
-
+    
     # Setup Workspace Folders and Files
     WorkspaceSetup()
 

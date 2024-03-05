@@ -1,6 +1,5 @@
-from ui import LoadingScreen, MainScreen
-from file_handling.FileIO import CSVWriter
-from score_calculation.ScoreCalculation import CustomizeMarks
+from ui.views import LoadingScreen, MainScreen
+
 if __name__ == "__main__":
     # Load Splash Screen
     LoadingScreen.Start()

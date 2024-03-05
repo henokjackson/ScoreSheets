@@ -25,6 +25,7 @@ isCsvHeaderWritten = False
 
 # Logical Parameters
 maximumScoreThreshold = 50
+loadingScreenInfoListIndex = 0
 
 # OS Parameters
 clearScreenCommand = ''

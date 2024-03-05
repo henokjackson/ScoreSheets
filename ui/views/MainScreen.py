@@ -1,10 +1,8 @@
 import sys
-#import multiprocessing
 from config import Globals
-from threading import Thread
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui.MainScreenController import InitProcesses
-from ui import SettingsDialog, CreditsDialog, ProcessingDialog
+from ui.views import SettingsDialog, CreditsDialog
+from ui.controllers.MainScreenController import SelectCourseListFile, SelectDestinationFolder, SelectNameListFile, SelectSourceFolder, OnProcessButtonClick
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -47,7 +45,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.source_folder_path_pushButton.setFont(font)
         self.source_folder_path_pushButton.setObjectName("source_folder_path_pushButton")
-        self.source_folder_path_pushButton.clicked.connect(self.SelectSourceFolder)
+        self.source_folder_path_pushButton.clicked.connect(lambda: SelectSourceFolder(self))
         self.destination_folder_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.destination_folder_groupBox.setGeometry(QtCore.QRect(40, 180, 341, 41))
         font = QtGui.QFont()
@@ -68,7 +66,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.destination_folder_pushButton.setFont(font)
         self.destination_folder_pushButton.setObjectName("destination_folder_pushButton")
-        self.destination_folder_pushButton.clicked.connect(self.SelectDestinationFolder)
+        self.destination_folder_pushButton.clicked.connect(lambda: SelectDestinationFolder(self))
         self.name_list_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.name_list_groupBox.setGeometry(QtCore.QRect(40, 230, 341, 41))
         font = QtGui.QFont()
@@ -89,7 +87,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.name_list_pushButton.setFont(font)
         self.name_list_pushButton.setObjectName("name_list_pushButton")
-        self.name_list_pushButton.clicked.connect(self.SelectNameListFile)
+        self.name_list_pushButton.clicked.connect(lambda: SelectNameListFile(self))
         self.courses_list_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.courses_list_groupBox.setGeometry(QtCore.QRect(40, 280, 341, 41))
         font = QtGui.QFont()
@@ -110,7 +108,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.courses_list_pushButton.setFont(font)
         self.courses_list_pushButton.setObjectName("courses_list_pushButton")
-        self.courses_list_pushButton.clicked.connect(self.SelectCourseListFile)
+        self.courses_list_pushButton.clicked.connect(lambda: SelectCourseListFile(self))
         self.process_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.process_pushButton.setGeometry(QtCore.QRect(160, 340, 91, 31))
         font = QtGui.QFont()
@@ -120,7 +118,7 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.process_pushButton.setFont(font)
         self.process_pushButton.setObjectName("process_pushButton")
-        self.process_pushButton.clicked.connect(self.OnProcessButtonClick)
+        self.process_pushButton.clicked.connect(lambda:OnProcessButtonClick(self))
         self.settings_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.settings_pushButton.setGeometry(QtCore.QRect(380, 360, 31, 31))
         self.settings_pushButton.setText("")
@@ -159,58 +157,6 @@ class Ui_MainWindow(object):
         self.process_pushButton.setText(_translate("MainWindow", "Calculate"))
         self.settings_pushButton.setToolTip(_translate("MainWindow", "Settings"))
         self.credits_pushButton.setToolTip(_translate("MainWindow", "Credits"))
-
-    def SelectSourceFolder(self):
-        sourceFolderPath = QtWidgets.QFileDialog.getExistingDirectory()
-        self.source_folder_path_lineEdit.setText(sourceFolderPath)
-
-    def SelectDestinationFolder(self):
-        destinationFolderPath = QtWidgets.QFileDialog.getExistingDirectory()
-        self.destination_folder_lineEdit.setText(destinationFolderPath)
-
-    def SelectNameListFile(self):
-        nameListFilePath = QtWidgets.QFileDialog.getOpenFileName()
-        self.name_list_lineEdit.setText(nameListFilePath[0])
-
-    def SelectCourseListFile(self):
-        courseListFilePath = QtWidgets.QFileDialog.getOpenFileName()
-        self.courses_list_lineEdit.setText(courseListFilePath[0])
-
-    def OnProcessButtonClick(self):
-        # Parameter Check
-        if ( self.source_folder_path_lineEdit.text() == "" or self.courses_list_lineEdit.text() == "" or self.name_list_lineEdit.text() == ""):
-            parametersNotSuppliedWarningMessageBox = QtWidgets.QMessageBox()
-            parametersNotSuppliedWarningMessageBox.setIcon(QtWidgets.QMessageBox.Critical)
-            parametersNotSuppliedWarningMessageBox.setText("All file paths were not configured. Please configure all file / folder paths.")
-            parametersNotSuppliedWarningMessageBox.setWindowTitle("Error")
-            parametersNotSuppliedWarningMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            parametersNotSuppliedWarningMessageBox.exec_()
-
-        else:
-            # Getting Parameters
-            sourceFolderPath = self.source_folder_path_lineEdit.text()
-            courseProviderNameListCsvFilePath = self.courses_list_lineEdit.text()
-            personNameListCsvFilePath = self.name_list_lineEdit.text()
-            isMarksCustomized = False
-            outputFolderParentPath = self.destination_folder_lineEdit.text()
-
-            # -nitProcesses Thread
-            Globals.initProcessesThread = Thread(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-            Globals.initProcessesThread.start()
-
-            # initProgressBarUpdate Thread
-            # globals.initProgressBarUpdateThread = Thread(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
-            # globals.initProgressBarUpdateThread.start()
-
-            # initProcesses Thread - multiprocessing implementation
-            # globals.initProcessesThread = multiprocessing.Process(target = InitProcesses, name = 'InitProcessesThread - MainScreen', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
-            # globals.initProcessesThread.start()
-
-            # initProgressBarUpdate Thread - multiprocessing implementation
-            # globals.initProgressBarUpdateThread = multiprocessing.Process(target = ProcessingDialog.Start, name = 'InitProgressBarThread - MainScreen')
-            # globals.initProgressBarUpdateThread.start()
-
-            ProcessingDialog.Start()
 
 def Start():
     app = QtWidgets.QApplication(sys.argv)

@@ -2,7 +2,7 @@ import os
 import threading
 from pathlib import Path
 from config import Globals
-from ui.Elements import ProgressBar
+from ui.views.Elements import ProgressBar
 from file_handling.FileIO import CSVWriter, PDFDataExtract
 from config.Configuration import Configuration, FlushBuffers
 from score_calculation.ScoreCalculation import ScoreAggregator

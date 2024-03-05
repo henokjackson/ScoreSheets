@@ -1,13 +1,6 @@
 import sys
-from threading import Thread
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui.LoadingScreenController import InitProcesses
-
-# Loading Messages Index
-index = 0
-timer = QtCore.QTimer()
-Form = None
-ui = None
+from ui.controllers.LoadingScreenController import Loading, StartProcesses
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -45,20 +38,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         self.version_label.setText(_translate("Form", "Version 1.0"))
 
-def Loading():
-    global index, Form, ui, timer
-    loadingOptions = ["Loading assets...", "Loading coniguration...", "Clearing up cache...", "Setting up workspace...", "Loading marking schemes..." ]
-    
-    if index < len(loadingOptions):
-        ui.loading_label.setText(loadingOptions[index])
-        index = index + 1
-    else:
-        timer.stop()
-        Form.close()
-        return
-
 def Start():
-    global index, Form, ui, timer
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
@@ -66,11 +46,8 @@ def Start():
     Form.show()
 
     # Load Message Updater
-    timer.timeout.connect(Loading)
+    timer = QtCore.QTimer()
+    timer.timeout.connect(lambda: Loading(Form, ui, timer))
     timer.start(300)
 
-    # InitProcesses Thread
-    InitProcesses_Thread = Thread(target = InitProcesses, name = 'InitProcessesThread - LoadingScreen')
-    InitProcesses_Thread.start()
-    app.exec_()
-    InitProcesses_Thread.join()
+    StartProcesses(app)

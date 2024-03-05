@@ -26,4 +26,6 @@ def ClearCache():
     rmtree("image_processing/__pycache__")
     rmtree("score_calculation/__pycache__")
     rmtree("text_processing/__pycache__")
-    rmtree("ui/__pycache__")
+    rmtree("process_handler/__pycache__")
+    rmtree("ui/controllers/__pycache__")
+    rmtree("ui/views/__pycache__")
