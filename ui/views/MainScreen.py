@@ -127,7 +127,7 @@ class Ui_MainWindow(object):
         self.settings_pushButton.setIcon(icon1)
         self.settings_pushButton.setIconSize(QtCore.QSize(32, 32))
         self.settings_pushButton.setObjectName("settings_pushButton")
-        self.settings_pushButton.clicked.connect(SettingsDialog.Render)
+        self.settings_pushButton.clicked.connect(lambda: SettingsDialog.Render())
         self.credits_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.credits_pushButton.setGeometry(QtCore.QRect(10, 360, 31, 31))
         self.credits_pushButton.setText("")
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
         self.credits_pushButton.setIcon(icon2)
         self.credits_pushButton.setIconSize(QtCore.QSize(28, 28))
         self.credits_pushButton.setObjectName("credits_pushButton")
-        self.credits_pushButton.clicked.connect(CreditsDialog.Render)
+        self.credits_pushButton.clicked.connect(lambda: CreditsDialog.Render())
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)

@@ -45,7 +45,7 @@ def Render():
     ui.setupUi(Form)
     Form.show()
 
-    # Load Message Updater
+    # Timer For Refreshing Loading Status
     timer = QtCore.QTimer()
     timer.timeout.connect(lambda: LoadingScreenController.Loading(Form, ui, timer))
     timer.start(300)

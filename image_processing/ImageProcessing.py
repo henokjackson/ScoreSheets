@@ -23,7 +23,7 @@ def ScaleImage(inputImage):
     inputImageHeightReduced = int(inputImageHeight/5)
     inputImageResized = inputImage.resize((inputImageWidthReduced, inputImageHeightReduced))
 
-    # Get Canvas SIze
+    # Get Canvas Size
     canvasWidth, canvasHeight = canvas.size
 
     # Calculating Image Offset

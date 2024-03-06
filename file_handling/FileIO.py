@@ -6,7 +6,6 @@ from text_processing.TextProcessing import TextExtract
 from image_processing.ImageProcessing import ImagePreProcess
 from score_calculation.ScoreCalculation import GetCourseDuration
 
-
 def CSVWriter():
     # Setting CSV File Columns Names
     csvColumns = ['Name','Course Type','Duration','Current Score','Total Score']
