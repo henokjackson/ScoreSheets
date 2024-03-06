@@ -56,5 +56,5 @@ def ExecuteMainProcessesThread(ui):
         # globals.initProgressBarUpdateThread.start()
 
         ProcessingDialog.Render()
-
-        #Globals.mainProcessesThread.join()
+        Globals.mainProcessesThread.join()
+        ProcessingDialog.Ui_Dialog.mainProcessesCompletedMessage()
