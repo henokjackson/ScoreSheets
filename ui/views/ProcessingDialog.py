@@ -42,6 +42,14 @@ class Ui_Dialog(object):
         self.abort_pushButton.setText(_translate("Dialog", "Abort"))
         self.file_no_label.setText(_translate("Dialog", "File No.  :"))
 
+    def mainProcessesCompletedMessage():
+        mainProcessesCompletedMessageBox = QtWidgets.QMessageBox()
+        mainProcessesCompletedMessageBox.setIcon(QtWidgets.QMessageBox.Information)
+        mainProcessesCompletedMessageBox.setText("Score Calculation Completed.")
+        mainProcessesCompletedMessageBox.setWindowTitle("Info")
+        mainProcessesCompletedMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        mainProcessesCompletedMessageBox.exec_()
+
 def Render():
     dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()

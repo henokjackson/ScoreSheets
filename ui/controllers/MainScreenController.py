@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets
 from threading import Thread
 from ui.views import ProcessingDialog
 from process_handling import MainProcesses
-
+from ui.views import ProcessingDialog
 def SelectSourceFolder(ui):
     sourceFolderPath = QtWidgets.QFileDialog.getExistingDirectory()
     ui.source_folder_path_lineEdit.setText(sourceFolderPath)
@@ -41,5 +41,6 @@ def ExecuteMainProcessesThread(ui):
         # MainProcesses Thread
         Globals.mainProcessesThread = Thread(target = MainProcesses.ExecuteProcesses, name = 'Main Processes Thread', args = (sourceFolderPath, courseProviderNameListCsvFilePath, personNameListCsvFilePath, isMarksCustomized, outputFolderParentPath))
         Globals.mainProcessesThread.start()
-
         ProcessingDialog.Render()
+        Globals.mainProcessesThread.join()
+        ProcessingDialog.Ui_Dialog.mainProcessesCompletedMessage()
