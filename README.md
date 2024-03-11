@@ -7,7 +7,7 @@
 For using this application we recommend running it in a conda environment.
 Refer the official documentation on how to install conda: https://docs.anaconda.com/free/miniconda/#latest-miniconda-installer-links
 
-## Setting Up a Conda Enviroment
+## Creating Conda Enviroment
 
 1. Create a conda environment:
 ```bash
