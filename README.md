@@ -31,17 +31,22 @@ cd ScoreSheets
 ```bash
 pip install -r requirements.txt
 ```
-4. Install fonts:
+4. Install fonts \[ only works on Linux. For Windows, manually install the fonts from ```assets/fonts/``` \] :
 ```bash
-sh install_fonts.sh
+cd scripts
+chmod +x install_fonts.sh
+./install_fonts.sh
+cd ..
 ```
 5. Download SpaCy packages
 ```bash
-python3 download_spacy_packages.py
+cd scripts
+python download_spacy_packages.py
+cd ..
 ```
 
 ## Running ScoreSheets
 To run the application:
 ```bash
-python3 main.py
+python main.py
 ```
