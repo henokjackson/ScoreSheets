@@ -1,13 +1,17 @@
 # ScoreSheets
-### A tool for calculating activity points from certificates of co-curricular activities for colleges under KTU university.
-![Logo](https://user-images.githubusercontent.com/36796068/216495907-bacfde09-d0e4-405b-ace6-2b9e37c5bc35.png)
+### A tool for calculating activity points from certificates of co-curricular activities for colleges under KTU.
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="assets/logo/logo.png" alt="Logo" width="900" height="258.3">
+  </a>
+</div>
 
 ## Installing Conda
 
 For using this application we recommend running it in a conda environment.
 Refer the official documentation on how to install conda: https://docs.anaconda.com/free/miniconda/#latest-miniconda-installer-links
 
-## Creating Conda Enviroment
+## Creating Conda Environment
 
 1. Create a conda environment:
 ```bash
