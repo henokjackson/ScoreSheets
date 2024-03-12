@@ -1,9 +1,7 @@
 # ScoreSheets
 ### A tool for calculating activity points from certificates of co-curricular activities for colleges under KTU.
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="assets/logo/logo.png" alt="Logo" width="900" height="258.3">
-  </a>
+  <img src="assets/logo/logo.png" alt="Logo" width="900" height="258.3">
 </div>
 
 ## Installing Conda
